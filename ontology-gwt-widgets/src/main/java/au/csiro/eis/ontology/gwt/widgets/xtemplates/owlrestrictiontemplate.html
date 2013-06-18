@@ -1,0 +1,10 @@
+<p>
+{type} {property} {filler}
+-
+<tpl if="this.type=='ObjectAllValuesFrom'"> 
+{property} property must be a type of {filler} 
+</tpl>
+<tpl if="type == 'ObjectSomeValuesFrom' "> 
+{property} property can be a type of {filler} 
+</tpl>
+</p>

@@ -1,0 +1,10 @@
+<module>
+   <inherits name='com.google.gwt.user.User'/>
+   
+  <inherits name="au.csiro.eis.Ontology" />
+  <inherits name="au.csiro.eis.ontology.gwt.rpc.ontologyService" />
+  
+   
+   
+   <source path="widgets"/>
+</module>

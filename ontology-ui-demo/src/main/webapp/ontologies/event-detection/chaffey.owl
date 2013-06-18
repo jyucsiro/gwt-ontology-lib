@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:j.0="http://www.csiro.au/cep/wicep.owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ed="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:qu-dim="http://purl.oclc.org/NET/ssnx/qu/dim#"
+    xmlns:ontology="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/jonathanyu#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:chaffey="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey.owl#"
+    xmlns:qu="http://purl.oclc.org/NET/ssnx/qu/qu#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ssn="http://purl.oclc.org/NET/ssnx/ssn#"
+  xml:base="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+  <owl:Class rdf:ID="ChaffeyChemSensor">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#VirtualSensor"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+        </owl:onProperty>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterQualityChemicalProperty"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ChaffeyOpsObservation">
+    <rdfs:label>Chaffey dam observation using Operations results</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DamManagementOperationalProperty"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="ChaffeyOperationsSensor"/>
+        </owl:allValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterFeature"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#GsnFieldMapping"/>
+  <owl:Class rdf:ID="ChaffeyAlgDataSensor">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#VirtualSensor"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#PresenceOfAlgaeProperty"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#ChaffeyOperationsSensor">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#VirtualSensor"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+        <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DamManagementOperationalProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ChaffeyChafchemObservation">
+    <rdfs:label>Chaffey dam observation using Water quality chemical analysis results</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#ChaffeyChemSensor"/>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterFeature"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterQualityChemicalProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#MeteorologicalProperty"/>
+  <owl:Class rdf:ID="ChaffeyMetFsSensor">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#VirtualSensor"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+        <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#MeteorologicalProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ChaffeyAlgdataObservation">
+    <rdfs:label>Chaffey dam observation using Algae data results</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterFeature"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:allValuesFrom rdf:resource="#ChaffeyAlgDataSensor"/>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#PresenceOfAlgaeProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ChaffeyMetFsObservation">
+    <rdfs:label>Chaffey dam observation using Meteorological results</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#ChaffeyMetFsSensor"/>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#MeteorologicalProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterFeature"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#hasFieldMapping"/>
+  <owl:ObjectProperty rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#isRelatedObservedProperty"/>
+  <owl:DatatypeProperty rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#hasGsnFieldName"/>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#label"/>
+  <owl:NamedIndividual rdf:ID="ChaffeyDam">
+    <rdf:type rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterFeature"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://www.csiro.au/cep/wicep.owl#Ph"/>
+  <owl:NamedIndividual rdf:about="http://www.csiro.au/cep/wicep.owl#TotalNitrogenObservedProperty"/>
+  <owl:NamedIndividual rdf:about="http://www.csiro.au/cep/wicep.owl#Nitrate"/>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->

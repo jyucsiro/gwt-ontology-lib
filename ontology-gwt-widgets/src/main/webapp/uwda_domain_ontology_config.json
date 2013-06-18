@@ -1,0 +1,85 @@
+[
+	{
+		"name" : "base",
+		"type" : "base",
+		"value" : [{
+				"IRI" : "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-domain/"
+			}
+		]
+	}, 
+	{
+		"name" : "default",
+		"type" : "default",
+		"value" : [{
+				"prefix" : "uwda-pipes",
+				"IRI" : "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl",
+				"path" : "ontologies/event-detection/uwda-pipe-sensing.owl"
+			}
+		]
+	}, 
+	{
+		"name" : "domain-triples",
+		"type" : "named-graph",
+		"iri" : "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-domain",
+		"value" : []
+	}, 
+	{
+		"name" : "rules-triples",
+		"type" : "named-graph",
+		"iri" : "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-rules",
+		"value" : []
+	}, 
+	{
+		"name" : "ssn",
+		"type" : "mapping",
+		"value" : [{
+				"prefix" : "ssn",
+				"IRI" : "http://purl.oclc.org/NET/ssnx/ssn",
+				"path" : "ontologies/ssn.owl"
+			}
+		]
+	}, 
+	{
+		"name" : "units",
+		"type" : "mapping",
+		"value" : [{
+				"prefix" : "qu",
+				"IRI" : "http://purl.oclc.org/NET/ssnx/qu/qu.owl",
+				"path" : "ontologies/qu.owl"
+			}, {
+				"prefix" : "qu-rec20",
+				"IRI" : "http://purl.oclc.org/NET/ssnx/qu/qu-rec20.owl",
+				"path" : "ontologies/qu-rec20.owl"
+			}, {
+				"prefix" : "qu-dim",
+				"IRI" : "http://purl.oclc.org/NET/ssnx/qu/dim"
+			}, {
+				"prefix" : "qu-quantity",
+				"IRI" : "http://purl.oclc.org/NET/ssnx/qu/quantity"
+			}, {
+				"prefix" : "qu-unit",
+				"IRI" : "http://purl.oclc.org/NET/ssnx/qu/unit"
+			}
+		]
+	}, 
+	{
+		"name" : "event-detection",
+		"type" : "mapping",
+		"value" : [{
+				"prefix" : "ed",
+				"IRI" : "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl",
+				"path" : "ontologies/event-detection.owl"
+			}
+		]
+	}, 
+	{
+		"name" : "domain",
+		"type" : "mapping",
+		"value" : [{
+				"prefix" : "uwda-pipes",
+				"IRI" : "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl",
+				"path" : "ontologies/event-detection/uwda-pipe-sensing.owl"
+			}
+		]
+	}
+]

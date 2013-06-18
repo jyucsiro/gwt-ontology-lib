@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:spin="http://spinrdf.org/spin#"
+    xmlns:sp="http://spinrdf.org/sp#"
+    xmlns:chaffey-spin="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey-spin.rdf#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:spl="http://spinrdf.org/spl#"
+  xml:base="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey-spin.rdf">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://spinrdf.org/spin"/>
+    <owl:imports rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection-spin.rdf"/>
+  </owl:Ontology>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->

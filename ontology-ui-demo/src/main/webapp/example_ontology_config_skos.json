@@ -1,0 +1,32 @@
+[
+	{
+		"name" : "base",
+		"type" : "base",
+		"value" : [{
+				"IRI" : "http://resources.data.gov.au/water/def/water-quality/ocean-colour"
+			}
+		]
+	}, 
+	
+	{
+		"name" : "default",
+		"type" : "default",
+		"value" : [{
+				"prefix" : "ocean-colour",
+				"IRI" : "http://resources.data.gov.au/water/def/water-quality/ocean-colour",
+				"path" : "ontologies/skos/csiro-ocean-colour.rdf"
+			}
+		]
+	} ,
+	{
+		"name" : "skos",
+		"type" : "mapping",
+		"value" : [{
+				"prefix" : "skos",
+				"IRI" : "http://www.w3.org/2004/02/skos/core",
+				"path" : "ontologies/skos/skos-core.rdf"
+			}
+		]
+	}
+	
+]

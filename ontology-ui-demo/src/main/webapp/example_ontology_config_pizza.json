@@ -1,0 +1,22 @@
+[
+	{
+		"name" : "base",
+		"type" : "base",
+		"value" : [{
+				"IRI" : "http://waterinformatics1-cdc.it.csiro.au/resource/pizza/"
+			}
+		]
+	}, 
+	
+	{
+		"name" : "default",
+		"type" : "default",
+		"value" : [{
+				"prefix" : "pizza",
+				"IRI" : "http://www.co-ode.org/ontologies/pizza/pizza.owl",
+				"path" : "ontologies/pizza.owl"
+			}
+		]
+	} 
+	
+]

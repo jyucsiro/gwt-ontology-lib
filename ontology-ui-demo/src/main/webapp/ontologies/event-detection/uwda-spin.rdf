@@ -1,0 +1,222 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:uwda-pipe-sensing="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl#"
+    xmlns:fn="http://www.w3.org/2005/xpath-functions#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ed="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#"
+    xmlns:afn="http://jena.hpl.hp.com/ARQ/function#"
+    xmlns:spin="http://spinrdf.org/spin#"
+    xmlns:uwda-spin="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-spin.rdf#"
+    xmlns:sp="http://spinrdf.org/sp#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:arg="http://spinrdf.org/arg#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:spl="http://spinrdf.org/spl#"
+    xmlns:ssn="http://purl.oclc.org/NET/ssnx/ssn#"
+  xml:base="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-spin.rdf">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection-spin.rdf"/>
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+    <owl:imports rdf:resource="http://spinrdf.org/spin"/>
+  </owl:Ontology>
+  <spin:Function rdf:ID="getDateDiffInYears">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >getDateDiffInYears</rdfs:label>
+    <rdfs:subClassOf rdf:resource="http://spinrdf.org/spin#Functions"/>
+    <spin:returnType rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <spin:constraint>
+      <spl:Argument>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >input date</rdfs:comment>
+        <spl:valueType rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+        <spl:predicate rdf:resource="http://spinrdf.org/sp#arg1"/>
+      </spl:Argument>
+    </spin:constraint>
+    <spin:body>
+      <sp:Select>
+        <sp:where rdf:parseType="Collection">
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >str</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <xsd:string>
+                <sp:arg1>
+                  <afn:now/>
+                </sp:arg1>
+              </xsd:string>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >sub</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <fn:substring>
+                <sp:arg3 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+                >4</sp:arg3>
+                <sp:arg2 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+                >1</sp:arg2>
+                <sp:arg1 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >str</sp:varName>
+                </sp:arg1>
+              </fn:substring>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >year</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <xsd:integer>
+                <sp:arg1 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >sub</sp:varName>
+                </sp:arg1>
+              </xsd:integer>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >date2</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <xsd:date>
+                <sp:arg1 rdf:resource="http://spinrdf.org/spin#_arg1"/>
+              </xsd:date>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >str2</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <xsd:string>
+                <sp:arg1 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >date2</sp:varName>
+                </sp:arg1>
+              </xsd:string>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >sub2</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <fn:substring>
+                <sp:arg3 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+                >4</sp:arg3>
+                <sp:arg2 rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+                >1</sp:arg2>
+                <sp:arg1 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >str2</sp:varName>
+                </sp:arg1>
+              </fn:substring>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >year2</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <xsd:integer>
+                <sp:arg1 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >sub2</sp:varName>
+                </sp:arg1>
+              </xsd:integer>
+            </sp:expression>
+          </sp:Bind>
+          <sp:Bind>
+            <sp:variable rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >diff</sp:varName>
+            </sp:variable>
+            <sp:expression>
+              <sp:sub>
+                <sp:arg2 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >year2</sp:varName>
+                </sp:arg2>
+                <sp:arg1 rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >year</sp:varName>
+                </sp:arg1>
+              </sp:sub>
+            </sp:expression>
+          </sp:Bind>
+        </sp:where>
+        <sp:resultVariables rdf:parseType="Collection">
+          <rdf:Description>
+            <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >diff</sp:varName>
+          </rdf:Description>
+        </sp:resultVariables>
+      </sp:Select>
+    </spin:body>
+  </spin:Function>
+  <spin:Function rdf:ID="getNumBurstEvents">
+    <rdfs:subClassOf rdf:resource="http://spinrdf.org/spin#Functions"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Returns the number of Burst Events for a given pipeFeature</rdfs:comment>
+    <spin:returnType rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <spin:constraint>
+      <spl:Argument>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >pipe uri</rdfs:comment>
+        <spl:valueType rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <spl:predicate rdf:resource="http://spinrdf.org/sp#arg1"/>
+      </spl:Argument>
+    </spin:constraint>
+    <spin:body>
+      <sp:Select>
+        <sp:where rdf:parseType="Collection">
+          <rdf:Description>
+            <sp:subject rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >burst</sp:varName>
+            </sp:subject>
+            <sp:predicate rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+            <sp:object rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl#BurstEvent"/>
+          </rdf:Description>
+          <rdf:Description>
+            <sp:subject rdf:parseType="Resource">
+              <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+              >burst</sp:varName>
+            </sp:subject>
+            <sp:predicate rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl#onPipeFeature"/>
+            <sp:object rdf:resource="http://spinrdf.org/spin#_arg1"/>
+          </rdf:Description>
+        </sp:where>
+        <sp:resultVariables rdf:parseType="Collection">
+          <rdf:Description>
+            <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >numBurstEvents</sp:varName>
+            <sp:expression>
+              <sp:Count>
+                <sp:expression rdf:parseType="Resource">
+                  <sp:varName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                  >burst</sp:varName>
+                </sp:expression>
+              </sp:Count>
+            </sp:expression>
+          </rdf:Description>
+        </sp:resultVariables>
+      </sp:Select>
+    </spin:body>
+  </spin:Function>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->

@@ -1,0 +1,275 @@
+# baseURI: http://resources.data.gov.au/water/def/water-quality/ocean-colour
+# imports: http://www.w3.org/2004/02/skos/core
+
+# c14n-version: 3
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour>
+  rdf:type owl:Ontology ;
+  owl:imports <http://www.w3.org/2004/02/skos/core> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/CDOM_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "So this looks like the absoption (a) due to CDOM at 440nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "CDOM_MIM" ;
+  skos:prefLabel "CDOM a_440, MIM SVDC on Rrs"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_CDOM_440nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+  skos:related <http://vocab.nerc.ac.uk/collection/P09/current/CDOM/> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/Chl_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Chlorophyll concentration inferred from IOPs"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "Chl_MIM" ;
+  skos:prefLabel "Chlorophyll concentration, MIM SVDC on Rrs"@en ;
+  skos:related <http://mmisw.org/ont/cf/parameter/mass_concentration_of_chlorophyll_in_sea_water> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/chlorophyll_a> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/concentration> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/unitless> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/Kd_490_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:closeMatch <http://vocab.nerc.ac.uk/collection/P01/current/ATT488AC/> ;
+  skos:definition "Attenuation coefficient with depth at 490nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "Kd_490_MIM" ;
+  skos:prefLabel "Kd_490, MIM SVDC on Rrs"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/attenuation_coefficient_490nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+  skos:related <http://vocab.nerc.ac.uk/collection/P02/current/ATTN/> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/Kd_par_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Kd is an attenuation coefficient (as in Flux = FluxAtSurface x exp(-Kd x depth)). PAR = Photosynthetically Available Radiation = energy of light available for photosynthesis (integrated across visible wavelengths – not just for one wavelength channel)"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "Kd_par_MIM" ;
+  skos:prefLabel "Kd_par, MIM SVDC on Rrs"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/attenuation_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+  skos:related <http://vocab.nerc.ac.uk/collection/P02/current/ATTN/> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/Nap_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Total Suspended Sediment (TSS) using the MIM SVDC method for suspended sediment (not dissolved) in the water except for algae (phytoplankton)."@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "Nap_MIM" ;
+  skos:prefLabel "TSS, MIM SVDC on Rrs"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/total_suspended_solids> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/total_suspended_sediment> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/milligrams_per_litre> ;
+  skos:related <http://vocab.nerc.ac.uk/collection/P04/current/G910/> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter>
+  rdf:type skos:Concept ;
+  skos:prefLabel "Ocean Colour Parameter concept"@en ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/SD_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "The Secchi Depth is the depth at which you can’t see the disk any more."@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "SD_MIM" ;
+  skos:prefLabel "Secchi Depth, MIM SVDC on Rrs"@en ;
+  skos:related <http://mmisw.org/ont/cf/parameter/secchi_depth_of_sea_water> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/sea_water> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/turbidity> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme>
+  rdf:type skos:ConceptScheme ;
+  rdfs:label "eReefs Marine Water Quality Remote Sensing Parameters (Ocean Colour)" ;
+  skos:changeNote [
+      dc:creator "Jonathan Yu" ;
+      dc:date "2013-02-22" ;
+      rdf:value "Converted from Excel document." ;
+    ] ;
+  skos:editorialNote "This is part of the CSIRO Ocean colour vocabularies for eReefs" ;
+  skos:hasTopConcept <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:prefLabel "eReefs Marine Water Quality Remote Sensing Parameters (Ocean Colour)"@en ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/a_CDM_MIM_441>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Absorption (a) due to Coloured and Detrital Matter at 441 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "a_CDM_MIM_441" ;
+  skos:prefLabel "a_CDM_MIM_441"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_CDM_441nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/a_CDOM_MIM_441>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Absorption (a) due to CDOM at 441 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "a_CDOM_MIM_441" ;
+  skos:prefLabel "a_CDOM_MIM_441"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_CDOM_441nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+  skos:related <http://vocab.nerc.ac.uk/collection/P09/current/CDOM/> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/a_NAP_MIM_441>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Absorption (a) due to Non-Algal Particles at 441 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "a_NAP_MIM_441" ;
+  skos:prefLabel "a_NAP_MIM_441"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_nap_441nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/a_P_MIM_441>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Absorption (a) due to Particles (NAP + phy) at 441 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "a_P_MIM_441" ;
+  skos:prefLabel "a_P_MIM_441"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_particles_441nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/a_phy_MIM_441>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Absorption (a) due to phytoplankton (phy) at 441 nm wavelength."@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "a_phy_MIM_441" ;
+  skos:prefLabel "a_phy_MIM_441"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_phytoplankton_441nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/a_tot_MIM_441>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Total absorption at 441 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "a_tot_MIM_441" ;
+  skos:prefLabel "a_tot_MIM_441"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/absorption_total_441nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/bb_NAP_MIM_551>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Backscatter (bb) due to Non-Algal particles (NAP) at 551 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "bb_NAP_MIM_551" ;
+  skos:prefLabel "bb_NAP_MIM_551"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/backscatter_nap_551nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/bb_P_MIM_551>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Backscatter (bb) due to Particles (NAP + phy) at 551 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "bb_P_MIM_551" ;
+  skos:prefLabel "bb_P_MIM_551"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/backscatter_particles_551nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/bb_phy_MIM_551>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Backscatter (bb) due to phytoplankton (phy) at 551 nm wavelength"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "bb_phy_MIM_551" ;
+  skos:prefLabel "bb_phy_MIM_551"@en ;
+  skos:related <http://mmisw.org/ont/ioos/parameter/absorption_coefficient> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/object/ocean_near_surface> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/quantity-kind/backscatter_phytoplankton_551nm> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/reciprocal_metre> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/dR_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Measure of the internal goodness-of-fit. Used as a diagnostic by the algorithm and algorithm developer"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "dR_MIM" ;
+  skos:prefLabel "distance on optical closure, MIM SVDC on Rrs"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/unitless> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/l2_flags>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Level-2 is an intermediate processing step. It generates many useful things like flags indicating the presence of cloud, or land. Used as a diagnostic by the algorithm and algorithm developer"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "l2_flags" ;
+  skos:prefLabel "Level-2 Processing Flags"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/unitless> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/n_bands>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Number of wavelength channels used in the MIM fit at each pixel (some channels may be rejected due to contamination or implausible values). Used as a diagnostic by the algorithm and algorithm developer"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "n_bands" ;
+  skos:prefLabel "n_bands"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/unitless> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/nn_flags>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "A neural network is used to apply atmospheric correction to the satellite data prior to the MIM method. These flags record whether the NN method was ok or went out of bounds. Used as a diagnostic by the algorithm and algorithm developer"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "nn_flags" ;
+  skos:prefLabel "Neural Network Failure Flags"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/unitless> ;
+.
+<http://resources.data.gov.au/water/def/water-quality/ocean-colour/siop_MIM>
+  rdf:type skos:Concept ;
+  skos:broader <http://resources.data.gov.au/water/def/water-quality/ocean-colour/OceanColourParameter> ;
+  skos:definition "Specific Inherent Optical Properties. This is a model parameter set. Used as a diagnostic by the algorithm and algorithm developer"@en ;
+  skos:inScheme <http://resources.data.gov.au/water/def/water-quality/ocean-colour/Scheme> ;
+  skos:notation "siop_MIM" ;
+  skos:prefLabel "siop, MIM SVDC on Rrs"@en ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/method/MIM_SVDC> ;
+  skos:related <http://resources.data.gov.au/water/def/water-quality/units/unitless> ;
+  skos:related <http://vocab.nerc.ac.uk/collection/P03/current/D015/> ;
+.

@@ -1,0 +1,502 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ed="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dim="http://purl.oclc.org/NET/ssnx/qu/dim#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:qu-rec20="http://purl.oclc.org/NET/ssnx/qu/qu-rec20#"
+    xmlns:qu="http://purl.oclc.org/NET/ssnx/qu/qu#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ssn="http://purl.oclc.org/NET/ssnx/ssn#"
+  xml:base="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://purl.oclc.org/NET/ssnx/ssn"/>
+    <owl:imports rdf:resource="http://purl.oclc.org/NET/ssnx/qu/qu-rec20"/>
+    <owl:imports rdf:resource="file:///Event-Detection-DomainOntologies/qu.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#Sensor">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="GsnFieldMapping"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasFieldMapping"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="DataStreamObservation">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observationResult"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="DataStreamSensorOutput"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#Observation"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#SensorOutput"/>
+  <owl:Class rdf:ID="DataStreamSensorObservationValue">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="QuantityObservationValue"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="QuantityValueConstraint">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#hasValue"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="#QuantityObservationValue"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ValueConstraint"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Quantity Value Constraint</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="ReplayedObservationalData">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#Sensing"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PressureUnit">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="http://purl.oclc.org/NET/ssnx/qu/unit#pascal"/>
+          <rdf:Description rdf:about="http://purl.oclc.org/NET/ssnx/qu/unit#barUnitOfPressure"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="WicepUnit"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unit relating to pressure/force</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="MeteorologicalProperty">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#WicepUnit"/>
+        </owl:someValuesFrom>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasQuantityUnitOfMeasure"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Pressure">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="PhysicalProperty"/>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pressure</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="DamManagementOperationalProperty">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#WicepUnit"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="#hasQuantityUnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+  </owl:Class>
+  <owl:Class rdf:ID="PresenceOfAlgaeProperty">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#WicepUnit"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="#hasQuantityUnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+  </owl:Class>
+  <owl:Class rdf:ID="MeteorologicalUnit">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#WicepUnit"/>
+    </rdfs:subClassOf>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="http://purl.oclc.org/NET/ssnx/qu/unit#percent"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unit relating to meteorological measurements</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#QuantityObservationValue">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#WicepUnit"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="#hasQuantityUnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#double"/>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="hasQuantityValue"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#ObservationValue"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Flow">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Flow</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#DataStreamSensorOutput">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasValue"/>
+        <owl:allValuesFrom rdf:resource="#DataStreamSensorObservationValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#SensorOutput"/>
+  </owl:Class>
+  <owl:Class rdf:ID="WaterQualityChemicalProperty">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="#hasQuantityUnitOfMeasure"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:about="#WicepUnit"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+    <rdfs:label>Water Quality Chemical Property</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#ValueConstraint">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="hasLogicalOperator"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasValue"/>
+        <owl:allValuesFrom rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#ObservationValue"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Value Constraint</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="ValueConstraintEventRule">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#FeatureOfInterest"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <rdf:Property rdf:ID="hasValueConstraint"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="#QuantityValueConstraint"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="EventRule"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="VirtualSensor"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Event Rule with Value Constraints on Sensor</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:about="#GsnFieldMapping">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="hasGsnFieldName"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="isRelatedObservedProperty"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Gsn Virtual Sensor Field Mapping</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="FlowUnits">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >FlowUnits</rdfs:label>
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="http://purl.oclc.org/NET/ssnx/qu/unit#litrePerSecond"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#WicepUnit"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="WaterFeature">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#WaterQualityChemicalProperty"/>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#hasProperty"/>
+        </owl:onProperty>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#FeatureOfInterest"/>
+  </owl:Class>
+  <owl:Class rdf:about="#WicepUnit">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+  </owl:Class>
+  <owl:Class rdf:about="#VirtualSensor">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Sensor"/>
+  </owl:Class>
+  <owl:Class rdf:about="http://purl.oclc.org/NET/ssnx/ssn#Output"/>
+  <owl:Class rdf:about="#PhysicalProperty">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#WicepUnit"/>
+        <owl:onProperty rdf:resource="#hasQuantityUnitOfMeasure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Physical Property</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="GsnSystem">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#System"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <rdf:Property rdf:ID="hasGsnDeployment"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <rdf:Property rdf:ID="hasGsnVirtualSensor"/>
+        </owl:onProperty>
+        <owl:allValuesFrom rdf:resource="#VirtualSensor"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Gsn System</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="Turbidity">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/qu/qu#QuantityKind"/>
+  </owl:Class>
+  <owl:Class rdf:about="#EventRule">
+    <rdfs:subClassOf rdf:resource="http://www.w3.org/2002/07/owl#Thing"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Event Rule</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="WaterQualityUnit">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <owl:NamedIndividual rdf:ID="nephelometricTurbidityUnit">
+            <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Nephelometric Turbidity Unit</rdfs:label>
+          </owl:NamedIndividual>
+          <qu:DerivedUnit rdf:ID="MilligramsPerLitre">
+            <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >MilligramsPerLitre</rdfs:label>
+          </qu:DerivedUnit>
+          <dim:ConcentrationUnit rdf:ID="pH">
+            <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >pH</rdfs:label>
+          </dim:ConcentrationUnit>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf rdf:resource="#WicepUnit"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Unit relating to Water Quality measurements</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="ComplexEventNotification">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Output"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#sensingMethodUsed"/>
+  <owl:ObjectProperty rdf:about="#isRelatedObservedProperty">
+    <rdfs:domain>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+        <owl:onProperty rdf:resource="#isRelatedObservedProperty"/>
+      </owl:Restriction>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasRelatedObservedProperty"/>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+  <owl:ObjectProperty rdf:about="#hasFieldMapping">
+    <rdfs:range>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="#GsnFieldMapping"/>
+        <owl:onProperty rdf:resource="#hasFieldMapping"/>
+      </owl:Restriction>
+    </rdfs:range>
+    <rdfs:domain>
+      <owl:Restriction>
+        <owl:someValuesFrom rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Sensor"/>
+        <owl:onProperty rdf:resource="#hasFieldMapping"/>
+      </owl:Restriction>
+    </rdfs:domain>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/ssn#isProducedBy"/>
+  <owl:ObjectProperty rdf:ID="hasSsnObservation">
+    <rdfs:range rdf:resource="#DataStreamObservation"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasSsnObservation</rdfs:label>
+  </owl:ObjectProperty>
+  <rdf:Property rdf:about="#hasValueConstraint">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasValueConstraint</rdfs:label>
+  </rdf:Property>
+  <rdf:Property rdf:about="#hasGsnVirtualSensor">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasGsnVirtualSensor</rdfs:label>
+    <rdfs:range rdf:resource="#VirtualSensor"/>
+  </rdf:Property>
+  <rdf:Property rdf:about="#hasGsnDeployment">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasGsnDeployment</rdfs:label>
+  </rdf:Property>
+  <owl:DatatypeProperty rdf:ID="hasNumericValue"/>
+  <owl:DatatypeProperty rdf:about="#hasLogicalOperator">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >hasLogicalOperator</rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:NamedIndividual rdf:ID="Tairmin">
+    <rdfs:label>Minimum Air temperature</rdfs:label>
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Rainfall">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Zml">
+    <rdfs:label>Depth below water surface using ZML</rdfs:label>
+    <rdf:type rdf:resource="#PresenceOfAlgaeProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="TotalPhosphorusObservedProperty">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="#MilligramsPerLitre"/>
+    <rdfs:label>Total Phosphorus</rdfs:label>
+    <rdf:type rdf:resource="#WaterQualityChemicalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Ph">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="#pH"/>
+    <rdf:type rdf:resource="#WaterQualityChemicalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="OutletHi">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Nitrate">
+    <rdf:type rdf:resource="#WaterQualityChemicalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Volume">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="TotalNitrogenObservedProperty">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="#MilligramsPerLitre"/>
+    <rdfs:label>Total Nitrogen</rdfs:label>
+    <rdf:type rdf:resource="#WaterQualityChemicalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="DestratOperation">
+    <rdfs:label>Hours of operation of the compressor for Destratification</rdfs:label>
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="RelativeHumidity">
+    <rdf:type rdf:resource="#MeteorologicalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Spill">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:AnnotationProperty rdf:about="http://www.w3.org/2000/01/rdf-schema#label"/>
+  <owl:NamedIndividual rdf:ID="Valve">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="MLDepth">
+    <rdfs:label>Depth below water surface using mldepth</rdfs:label>
+    <rdf:type rdf:resource="#PresenceOfAlgaeProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Elevation">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="ChaffeyDam"/>
+  <owl:NamedIndividual rdf:ID="Tairmax">
+    <rdfs:label>Maximum Air Temperature</rdfs:label>
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:about="http://purl.oclc.org/NET/ssnx/qu/unit#milligramPerLitre"/>
+  <owl:NamedIndividual rdf:ID="Air_Temperature">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="http://purl.oclc.org/NET/ssnx/qu/unit#degreeCelsius"/>
+    <rdf:type rdf:resource="#MeteorologicalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Inflow">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="OutletLo">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="DownstreamFlow">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="Discharge">
+    <rdf:type rdf:resource="#DamManagementOperationalProperty"/>
+  </owl:NamedIndividual>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->

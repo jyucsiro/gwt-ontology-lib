@@ -1,0 +1,94 @@
+# baseURI: http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu.ttl
+# imports: http://spinrdf.org/spin
+# imports: http://waterinformatics1-cdc.it.csiro.au/resource/event-detection-spin.rdf
+# imports: http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey.owl
+
+# c14n-version: 3
+@prefix : <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu.ttl#> .
+@prefix chaffey: <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey.owl#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sp: <http://spinrdf.org/sp#> .
+@prefix spin: <http://spinrdf.org/spin#> .
+@prefix spl: <http://spinrdf.org/spl#> .
+@prefix ssn: <http://purl.oclc.org/NET/ssnx/ssn#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+<http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu.ttl>
+  rdf:type owl:Ontology ;
+  owl:imports <http://spinrdf.org/spin> ;
+  owl:imports <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection-spin.rdf> ;
+  owl:imports <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey.owl> ;
+  owl:versionInfo "Created with TopBraid Composer"^^xsd:string ;
+.
+:ChaffeyChafchemObservation_1
+  rdf:type chaffey:ChaffeyChafchemObservation ;
+  ssn:featureOfInterest chaffey:ChaffeyDam ;
+  ssn:observationResult :DataStreamSensorOutput_2 ;
+  ssn:observedBy <http://www.csiro.au/cep/ontology/chafchemvm> ;
+  ssn:observedProperty <http://www.csiro.au/cep/wicep.owl#TotalNitrogenObservedProperty> ;
+  rdfs:label "dummy observation instance"^^xsd:string ;
+.
+:ChaffeyMetFsSensor_1
+  rdf:type chaffey:ChaffeyMetFsSensor ;
+  ssn:observes <http://www.csiro.au/cep/wicep.owl#Air_Temperature> ;
+  rdfs:label ""^^xsd:string ;
+.
+:DataStreamSensorObservationValue_1
+  rdf:type <http://www.csiro.au/cep/wicep.owl#DataStreamSensorObservationValue> ;
+  rdfs:label ""^^xsd:string ;
+.
+:DataStreamSensorOutput_1
+  rdf:type <http://www.csiro.au/cep/wicep.owl#DataStreamSensorOutput> ;
+  rdfs:label ""^^xsd:string ;
+.
+:DataStreamSensorOutput_2
+  rdf:type <http://www.csiro.au/cep/wicep.owl#DataStreamSensorOutput> ;
+  ssn:hasValue :DataStreamSensorObservationValue_1 ;
+  rdfs:label ""^^xsd:string ;
+.
+:QuantityObservationValue_1
+  rdf:type <http://www.csiro.au/cep/wicep.owl#QuantityObservationValue> ;
+  rdfs:label ""^^xsd:string ;
+.
+:QuantityObservationValue_2
+  rdf:type <http://www.csiro.au/cep/wicep.owl#QuantityObservationValue> ;
+  rdfs:label "40 degrees C"^^xsd:string ;
+.
+:QuantityValueConstraint_1
+  rdf:type <http://www.csiro.au/cep/wicep.owl#QuantityValueConstraint> ;
+  ssn:hasValue :QuantityObservationValue_1 ;
+  rdfs:label ""^^xsd:string ;
+.
+:QuantityValueConstraint_2
+  rdf:type <http://www.csiro.au/cep/wicep.owl#QuantityValueConstraint> ;
+  ssn:hasValue :QuantityObservationValue_2 ;
+  rdfs:label "greater than 40 degrees C"^^xsd:string ;
+.
+:ValueConstraintEventRule_1
+  rdf:type <http://www.csiro.au/cep/wicep.owl#ValueConstraintEventRule> ;
+  ssn:observedProperty <http://www.csiro.au/cep/wicep.owl#TotalNitrogenObservedProperty> ;
+  rdfs:label ""^^xsd:string ;
+.
+:ValueConstraintEventRule_2
+  rdf:type <http://www.csiro.au/cep/wicep.owl#ValueConstraintEventRule> ;
+  ssn:observedProperty <http://www.csiro.au/cep/wicep.owl#Air_Temperature> ;
+  rdfs:label ""^^xsd:string ;
+.
+<http://www.csiro.au/cep/wicep.owl#ValueConstraintEventRule>
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty ssn:observedProperty ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:cardinality "1"^^xsd:nonNegativeInteger ;
+      owl:onProperty <http://www.csiro.au/cep/wicep.owl#hasValueConstraint> ;
+    ] ;
+  rdfs:subClassOf [
+      rdf:type owl:Restriction ;
+      owl:maxCardinality "1"^^xsd:int ;
+      owl:onProperty ssn:observedBy ;
+    ] ;
+.
