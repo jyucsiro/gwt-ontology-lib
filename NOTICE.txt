@@ -1,0 +1,64 @@
+GWT Ontology UI Toolkit
+
+
+	Copyright 2013 CSIRO 
+
+
+
+Licence information regarding related third party software
+
+	The Ontology UI library uses and needs the following third party software/libraries to build.
+
+	-	Name:		Google Web Toolkit (GWT)
+		License:	Apache License v2.0
+		URL:		http://code.google.com/webtoolkit/
+
+	-	Name:		JUnit
+		Licence:	Common Public Licence v1.0
+		URL:		http://www.junit.org/
+	
+	-	Name:		Apache Jena
+		License:	Apache License v2.0
+		URL:		http://jena.sourceforge.net
+	
+	-	Name:		Pellet
+		Licence:        AGPL v3.0
+		URL:		http://clarkparsia.com/pellet
+	
+	-	Name:		OWL API
+		Licence:        GPL Lesser v3.0
+		URL:		http://owlapi.sourceforge.net/
+
+	-	Name:		Sencha GXT
+		Licence:        GNU GPL Lesser v3.0
+		URL:		http://www.sencha.com/products/gxt
+
+	-	Name:		Topbraid SPIN API
+		Licence:        Apache Licence v2.0
+		URL:		http://topbraid.org/spin/api
+	
+	-	Name:		Google GSON
+		Licence:        Apache Licence v2.0
+		URL:		https://code.google.com/p/google-gson
+
+	-	Name:		Apache HttpComponents
+		Licence:        Apache Licence v2.0
+		URL:		http://hc.apache.org/
+
+	-	Name:		Aterms
+		Licence:        BSD Licence
+		URL:		http://www.meta-environment.org/Meta-Environment/ATerms
+
+	-	Name:		JGraphT
+		Licence:        GNU Lesser GPL v2.1
+		URL:		http://jgrapht.org
+
+	-	Name:		Apache Commons
+		Licence:        Apache 2.0
+		URL:		http://commons.apache.org/
+
+
+
+
+
+

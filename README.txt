@@ -1,5 +1,5 @@
-Ontology UIs using GWT
-======================
+GWT Ontology UI Toolkit
+=======================
 This contains Java libraries for creating GWT Web Applications.
 
 Author: Jonathan Yu
