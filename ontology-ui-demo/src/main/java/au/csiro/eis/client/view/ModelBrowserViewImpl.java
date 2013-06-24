@@ -23,6 +23,10 @@ public class ModelBrowserViewImpl implements  IsWidget, EntryPoint,OntologyView 
 	
 	int TREE_PANEL_HEIGHT = 300;
 	int TREE_PANEL_WIDTH = 850;
+	private int TREE_VIEWER_WIDTH;
+	private int TREE_BROWSER_WIDTH;
+	private int TREE_VIEWER_HEIGHT;
+	private int TREE_BROWSER_HEIGHT;
 
 	
 	public ModelBrowserViewImpl() throws OntologyInitException {
@@ -68,7 +72,11 @@ public class ModelBrowserViewImpl implements  IsWidget, EntryPoint,OntologyView 
 			ontTreePanel.setPANEL_HEIGHT(this.TREE_PANEL_HEIGHT);
 			ontTreePanel.setPANEL_WIDTH(this.TREE_PANEL_WIDTH);
 			
-			ontTreePanel.setMODEL_VIEWER_WIDTH(300);
+			ontTreePanel.setMODEL_BROWSER_HEIGHT(this.TREE_BROWSER_HEIGHT);
+			ontTreePanel.setMODEL_BROWSER_WIDTH(this.TREE_BROWSER_WIDTH);
+			
+			ontTreePanel.setMODEL_VIEWER_WIDTH(this.TREE_VIEWER_WIDTH);
+			ontTreePanel.setMODEL_VIEWER_HEIGHT(this.TREE_VIEWER_HEIGHT);
 
 		} catch (OntologyInitException e) {
 			// TODO Auto-generated catch block
@@ -157,6 +165,28 @@ public class ModelBrowserViewImpl implements  IsWidget, EntryPoint,OntologyView 
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void setTREE_VIEWER_HEIGHT(int i) {
+		TREE_VIEWER_HEIGHT = i;
+		
+	}
+
+	public void setTREE_VIEWER_WIDTH(int i) {
+
+		TREE_VIEWER_WIDTH = i;
+	}
+
+	public void setTREE_BROWSER_HEIGHT(int i) {
+		
+		TREE_BROWSER_HEIGHT = i;
+	}
+
+	public void setTREE_BROWSER_WIDTH(int i) {
+		TREE_BROWSER_WIDTH = i;
+		
+	}
+	
+	
 	
 	
 

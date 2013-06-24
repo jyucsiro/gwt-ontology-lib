@@ -106,7 +106,8 @@ public class SparqlPortletViewImpl implements  IsWidget, EntryPoint,OntologyView
 		ToolBar toolBar = new ToolBar();
 
 		TextButton item1 = new TextButton("Add SPARQL query portlet");
-
+		
+		
 		item1.addSelectHandler(new SelectHandler() {
 
 			public void onSelect(SelectEvent event) {
@@ -117,6 +118,7 @@ public class SparqlPortletViewImpl implements  IsWidget, EntryPoint,OntologyView
 
 		toolBar.add(item1);
 
+		
 
 		layout.add(toolBar);
 		layout.add(this.portalLayout);
@@ -153,28 +155,41 @@ public class SparqlPortletViewImpl implements  IsWidget, EntryPoint,OntologyView
 		VerticalLayoutContainer con = new VerticalLayoutContainer();
 
 		OwlOntologyBean ontologyBean = (OwlOntologyBean) this.presenter.getModel();
-		Map<String,String> prefixes = ontologyBean.getPrefixes();
-		StringBuffer sb = new StringBuffer();
 		
-		for(String key : prefixes.keySet()) {
-			String prefix = prefixes.get(key);
+		String prefixString = null;
+		if(ontologyBean !=null) {
+			Map<String,String> prefixes = ontologyBean.getPrefixes();
+			StringBuffer sb = new StringBuffer();
 			
-			String value = "PREFIX " + key + ": <" + prefix + ">\n";
-			System.out.println(value);
-			sb.append(value);
-
+			for(String key : prefixes.keySet()) {
+				String prefix = prefixes.get(key);
+				
+				String value = "PREFIX " + key + ": <" + prefix + ">\n";
+				System.out.println(value);
+				sb.append(value);
+				prefixString = "PREFIX xml:<http://www.w3.org/XML/1998/namespace>\n" +
+				"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
+				"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\n" +
+				"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n" +
+				"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+				"PREFIX skos:<http://www.w3.org/2004/02/skos/core#>\n\n" +
+				sb.toString();
+			}
+		}
+		else {
+			prefixString = 	"PREFIX xml:<http://www.w3.org/XML/1998/namespace>\n" +
+					"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
+					"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\n" +
+					"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n" +
+					"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
+					"PREFIX skos:<http://www.w3.org/2004/02/skos/core#>\n\n";
+		
 		}
 		
 		con.setScrollMode(ScrollMode.AUTO);
 		final TextArea queryTextArea = new TextArea();
 		queryTextArea.setText(
-				"PREFIX xml:<http://www.w3.org/XML/1998/namespace>\n" +
-						"PREFIX rdfs:<http://www.w3.org/2000/01/rdf-schema#>\n" +
-						"PREFIX xsd:<http://www.w3.org/2001/XMLSchema#>\n" +
-						"PREFIX owl:<http://www.w3.org/2002/07/owl#>\n" +
-						"PREFIX rdf:<http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n" +
-						"PREFIX skos:<http://www.w3.org/2004/02/skos/core#>\n\n"+
-						sb.toString() +
+						prefixString + 
 						"SELECT ?resource\n" +
 						"WHERE {\n" +
 						"?resource rdf:type owl:Class\n" +

@@ -248,14 +248,17 @@ public class OntologyTreePanel implements IsWidget {
 		//cp.setLayout(new HorizontalLayout()));
 		//cp.setHeight(800);
 		cp.setPixelSize(this.PANEL_WIDTH, this.PANEL_HEIGHT);
-
+		cp.setStyleName("ontTreePanelContentPanel");
+		
 		cp.setHeaderVisible(false);
 
 		cp.setCollapsible(true);  
 
 		HorizontalLayoutContainer hc = new HorizontalLayoutContainer();
+		hc.setStyleName("ontTreePanelContentContainer");
 		
-		modelBrowserContainer = new FlowLayoutContainer();  
+		modelBrowserContainer = new FlowLayoutContainer();
+		modelBrowserContainer.setStyleName("ontTreeModelBrowserContainer");
 		modelBrowserContainer.setPixelSize(this.MODEL_BROWSER_WIDTH, this.MODEL_BROWSER_HEIGHT);  
 		modelBrowserContainer.setBorders(true);  
 		//modelBrowserContainer.setLayout(new FitLayout());
@@ -269,7 +272,9 @@ public class OntologyTreePanel implements IsWidget {
 
 
 		if(this.hasViewer) {
-			modelViewerContainer = new FlowLayoutContainer();  
+			modelViewerContainer = new FlowLayoutContainer();
+			modelViewerContainer.setStyleName("ontTreeModelViewerContainer");
+			
 			modelViewerContainer.setPixelSize(this.MODEL_VIEWER_WIDTH, this.MODEL_VIEWER_HEIGHT);  
 			modelViewerContainer.setBorders(true);  
 			modelViewerContainer.setScrollMode(ScrollMode.AUTOY);
@@ -468,6 +473,7 @@ public class OntologyTreePanel implements IsWidget {
 		//tree.getStyle().setJointOpenIcon(OntologyClassesTreeBundle.INSTANCE.conceptLeaf());
 		tree.getStyle().setNodeCloseIcon(OntologyClassesTreeBundle.INSTANCE.concept());
 		tree.getStyle().setNodeOpenIcon(OntologyClassesTreeBundle.INSTANCE.concept());
+		tree.setStyleName("ontTreeModel");
 
 		tree.setLoader(treeloader);
 
@@ -707,6 +713,7 @@ public class OntologyTreePanel implements IsWidget {
     			infoTemplate = new OntologyClassInfoTemplate(selectedClass, ontologyQueryService);
 
     			modelViewerContainer.add(infoTemplate.asWidget());
+    			
     		} else {
     			infoTemplate.updatePanel(selectedClass);
     		}

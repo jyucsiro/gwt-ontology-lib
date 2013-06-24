@@ -73,11 +73,14 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 	//private final Messages messages = GWT.create(Messages.class);
 
 	VerticalLayoutContainer navContainer;
-	private Label lbl = new Label();
+	private Label lbl = new Label("");
 
 
-	private final String CONFIG_FILE = "example_ontology_config_skos.json";
+	//private final String CONFIG_FILE = "example_ontology_config_skos.json";
+	private final String CONFIG_FILE = "example_ontology_config_pizza.json";
+
 	private final String NAV_CLASS_TREE_BROWSER = "class-tree-browser";
+	
 	private final String NAV_CLASS_INFO_PORTLET = "class-info-portlet";
 	private final String NAV_FORM_UI = "form-ui";
 	private final String NAV_SPARQL_PORTLETS = "sparql-ui";
@@ -103,7 +106,9 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 		box.setProgressText("Initializing...");
 		box.show();
 		box.updateProgress(.5,  "{0}% Complete");
-
+		
+		lbl.setText("The current ontology is: " + config.getConfigFileName());
+		
 
 		ontologyService.initialiseSvc(config, new AsyncCallback<Boolean>() {
 
@@ -136,12 +141,12 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 
 	public void setupNavPanel() {
 		this.navContainer = new VerticalLayoutContainer();
-
+		navContainer.setStyleName("navContainer");
 		this.west.setWidget(navContainer);		
 
 		this.navContainer.add(new Hyperlink("Class hierarchy browser", this.NAV_CLASS_TREE_BROWSER));
 		this.navContainer.add(new Hyperlink("Class info boxes", this.NAV_CLASS_INFO_PORTLET));
-		this.navContainer.add(new Hyperlink("Form ui", this.NAV_FORM_UI));
+		//this.navContainer.add(new Hyperlink("Form ui", this.NAV_FORM_UI));
 		this.navContainer.add(new Hyperlink("SPARQL portlets", this.NAV_SPARQL_PORTLETS));
 
 		this.navContainer.add(new Hyperlink("Switch ontology", this.SWITCH_ONTOLOGY));
@@ -151,7 +156,7 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 	public void onValueChange(ValueChangeEvent<String> event) {
 		// This method is called whenever the application's history changes. Set
 		// the label to reflect the current history token.
-		lbl.setText("The current history token is: " + event.getValue());
+		//lbl.setText("The current history token is: " + event.getValue());
 
 		System.out.println("The current history token is: " + event.getValue());
 
@@ -200,15 +205,18 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 		final Radio radio1 = new Radio();
 		radio1.setBoxLabel("Ocean colour vocabs (SKOS)");
 		radio1.setData("config", "example_ontology_config_skos.json");
+		radio1.setData("name", "Ocean colour vocabs");
 
 		final Radio radio2 = new Radio();
 		radio2.setBoxLabel("Pizza ontology (OWL)");
 		radio2.setData("config", "example_ontology_config_pizza.json");
+		radio2.setData("name", "Pizza ontology");
 		
 		final Radio radio3 = new Radio();
 		radio3.setBoxLabel("Event detection ontologies(OWL)");
 		radio3.setData("config", "example_ontology_config.json");
-
+		radio3.setData("name", "Event detection domain ontology");
+		
 		con.add(radio1);
 		con.add(radio2);
 		con.add(radio3);
@@ -237,14 +245,18 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 					//determine which radio button is selected
 					if(radio1.getValue() == true) {
 						doSwitchOntology((String) radio1.getData("config"));
+						lbl.setText("The current ontology is: " + (String) radio1.getData("name"));
+
 					}
 					else if(radio2.getValue() == true) {
 						doSwitchOntology((String) radio2.getData("config"));
-
+						lbl.setText("The current ontology is: " + (String) radio2.getData("name"));
+						
 					}
 					else if(radio3.getValue() == true) {
 						doSwitchOntology((String) radio3.getData("config"));
-
+						lbl.setText("The current ontology is: " + (String) radio3.getData("name"));
+						
 					}
 
 
@@ -283,6 +295,8 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 		});
 		
 	}
+	
+	
 
 	public void onAppEvent(AppEvent event) {
 		if(event.getEventType().equals(AppEvents.OntologySvnInit)) {
@@ -307,8 +321,14 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 			modelTreeView = new ModelBrowserViewImpl();
 			modelTreeView.setOntologyService(ontologyService);
 
-			modelTreeView.setTREE_PANEL_HEIGHT(600);
-			modelTreeView.setTREE_PANEL_WIDTH(800);
+			modelTreeView.setTREE_PANEL_HEIGHT(400);
+			modelTreeView.setTREE_PANEL_WIDTH(600);
+			
+			modelTreeView.setTREE_BROWSER_HEIGHT(400);
+			modelTreeView.setTREE_BROWSER_WIDTH(270);
+
+			modelTreeView.setTREE_VIEWER_HEIGHT(400);
+			modelTreeView.setTREE_VIEWER_WIDTH(270);
 
 			ViewOntologyPresenter modelBrowserPresenter 
 			= new ViewOntologyPresenter(ontologyService,  this.eventBus, modelTreeView, con);
@@ -393,8 +413,6 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 			sparqlView = new SparqlPortletViewImpl();
 			sparqlView.setOntologyService(ontologyService);
 
-
-
 			ViewOntologyPresenter classInfoPresenter 
 			= new ViewOntologyPresenter(ontologyService,  this.eventBus, sparqlView, con);
 
@@ -443,6 +461,7 @@ public class ExampleUi implements EntryPoint, AppEventHandler, IsWidget, ValueCh
 		northData.setSplit(true);
 		VerticalLayoutContainer header = new VerticalLayoutContainer();
 		header.add(new HTML("<div style='font-size: large'>Ontology-driven UI API demo</div>"));
+		
 		header.add(lbl);
 		//header.set
 		this.north.setWidget(header);

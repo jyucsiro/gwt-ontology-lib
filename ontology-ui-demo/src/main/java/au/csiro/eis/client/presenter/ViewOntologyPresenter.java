@@ -59,7 +59,7 @@ public class ViewOntologyPresenter implements OntologyPresenter, OntologyService
 		AsyncCallback<OwlOntologyBean> callback = new AsyncCallback<OwlOntologyBean>() {
 
 			public void onFailure(Throwable caught) {
-				System.out.println("getOntologyBean - caught exception");
+				System.out.println("getOntologyBean - caught exception" + caught.toString());
 
 	            eventBus.fireEvent(new OntologyServiceExceptionEvent(caught));				
 			}
@@ -67,8 +67,7 @@ public class ViewOntologyPresenter implements OntologyPresenter, OntologyService
 			public void onSuccess(OwlOntologyBean result) {
 				System.out.println("getOntologyBean - success: firing OntologyServiceGetOntologyEvent");
 
-				eventBus.fireEvent(new OntologyServiceGetOntologyEvent(result));				
-
+				eventBus.fireEvent(new OntologyServiceGetOntologyEvent(result));	
 			}			
 		};
 

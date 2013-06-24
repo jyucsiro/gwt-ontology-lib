@@ -2,20 +2,33 @@ package au.csiro.eis.ontology.gwt.widgets;
 
 import au.csiro.eis.ontology.beans.OwlClassBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
+import au.csiro.eis.ontology.beans.OwlObjectPropertyBean;
 import au.csiro.eis.ontology.beans.OwlRestrictionBean;
 import au.csiro.eis.ontology.gwt.rpc.client.ontologyService.OntologyQueryServiceAsync;
 import au.csiro.eis.ontology.gwt.widgets.xtemplates.OwlClassRenderer;
 import au.csiro.eis.ontology.gwt.widgets.xtemplates.OwlRestrictionRenderer;
 
 import com.google.gwt.core.shared.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.sencha.gxt.core.client.util.ToggleGroup;
 import com.sencha.gxt.widget.core.client.ContentPanel;
+import com.sencha.gxt.widget.core.client.Dialog;
 import com.sencha.gxt.widget.core.client.Window;
+import com.sencha.gxt.widget.core.client.Dialog.PredefinedButton;
 import com.sencha.gxt.widget.core.client.container.FlowLayoutContainer;
+import com.sencha.gxt.widget.core.client.container.VerticalLayoutContainer;
+import com.sencha.gxt.widget.core.client.event.HideEvent;
+import com.sencha.gxt.widget.core.client.event.HideEvent.HideHandler;
+import com.sencha.gxt.widget.core.client.form.FieldSet;
+import com.sencha.gxt.widget.core.client.form.Radio;
 import com.sencha.gxt.widget.core.client.grid.ColumnModel;
 
 public class OntologyClassInfoTemplate implements IsWidget {
@@ -147,55 +160,79 @@ public class OntologyClassInfoTemplate implements IsWidget {
 		
 		if(classBean.getLabel() != null ) {
 			final HTML label 
-			= new HTML("<p style='font:10px arial,sans-serif'>label: " + classBean.getLabel() + "</p>");
+			= new HTML("<p class='ontologyClassInfoAnnotation'>label: " + classBean.getLabel() + "</p>");
 			con.add(label);
 		}
 		
 		if(classBean.getRdfsComment() != null) {
 			final HTML comments 
-				= new HTML("<p style='font:10px arial,sans-serif'>comment: " + classBean.getRdfsComment() + "</p>");
+				= new HTML("<p class='ontologyClassInfoAnnotation'>comment: " + classBean.getRdfsComment() + "</p>");
 			con.add(comments);
 		}
 		
 		
 		
 		if(classBean.hasRestrictions()) {
-			con.add(new HTML("<br/><p>Property Restrictions:"));
+			con.add(new HTML("<br/><div class='ontPropRestr'><h3>Property Restrictions:</h3>"));
 
-	
-			for(OwlRestrictionBean restriction : classBean.getRestrictions()){
-				System.out.println("Restiction Type: '" + restriction.getType() + "'");
-				final HTML restriction_html = new HTML("<div style=\"font:11px arial,sans-serif\">- "+ restriction.toString() + "</div>");
-				con.add(restriction_html);			
+			if(classBean.getRestrictions().size() > 0) {
+				con.add(new HTML("<ul>"));
+				for(OwlRestrictionBean restriction : classBean.getRestrictions()){
+					System.out.println("Restiction Type: '" + restriction.getType() + "'");
+					final HTML restriction_html = new HTML("<li><div class='ontologyClassInfoPropertyRestrictions'>"+ restriction.toString() + "</div></li>");
+					con.add(restriction_html);
+					
+				}
+				con.add(new HTML("</ul>"));
+			
 			}
-			con.add(new HTML("</p>"));
+			con.add(new HTML("</div>"));
 
 		}
 		
 		if(classBean.hasIndividuals()) {
-			con.add(new HTML("<br/><p>Defined instances:"));
+			HTML indivWrapper = new HTML("<h3>Defined instances:</h3>");
+			indivWrapper.setStyleName("ontologyClassIndiv");
+			con.add(indivWrapper);
 	
-			for(OwlIndividualBean indiv : classBean.getIndividuals()){
-				System.out.println("Instance: '" + indiv.getIri() + "'");
+			if(classBean.getIndividuals().size() >0) {
 				
-				String renderedLabel = "";
-				if(indiv.getLabel() != null && indiv.getLabel().length()>0) {
-					renderedLabel = indiv.getLabel();
+				for(final OwlIndividualBean indiv : classBean.getIndividuals()){
+					System.out.println("Instance: '" + indiv.getIri() + "'");
+					
+					String renderedLabel = "";
+					if(indiv.getLabel() != null && indiv.getLabel().length()>0) {
+						renderedLabel = indiv.getLabel();
+					}
+					else if(indiv.getName() != null && indiv.getName().length()>0) {
+						renderedLabel = indiv.getName();
+					}
+					else if(indiv.getLocalName() != null && indiv.getLocalName().length()>0) {
+						renderedLabel = indiv.getLocalName();
+					}
+					else {
+						renderedLabel = indiv.getIri();
+					}
+					
+					Label indivLink = new Label(renderedLabel);
+					indivLink.setStyleName("ontologyIndivLabel");
+					indivLink.addClickHandler(new ClickHandler() {
+
+						public void onClick(ClickEvent event) {
+							showMoreInfoDlg(indiv);
+							
+						}
+						
+					});
+					
+					
+					//final HTML indiv_html= new HTML("<li class='ontologyIndivLabel'>"+ indivLink + "</li>");
+					//con.add(indiv_html);
+					con.add(indivLink);
 				}
-				else if(indiv.getName() != null && indiv.getName().length()>0) {
-					renderedLabel = indiv.getName();
-				}
-				else if(indiv.getLocalName() != null && indiv.getLocalName().length()>0) {
-					renderedLabel = indiv.getLocalName();
-				}
-				else {
-					renderedLabel = indiv.getIri();
-				}
-				
-				final HTML restriction_html = new HTML("<div style=\"font:11px arial,sans-serif\">- "+ renderedLabel + "</div>");
-				con.add(restriction_html);			
 			}
-			con.add(new HTML("</p>"));
+			con.add(new HTML("</div>"));
+			
 
 		}
 		
@@ -378,6 +415,71 @@ public class OntologyClassInfoTemplate implements IsWidget {
         */
 	}
 
+	protected void showMoreInfoDlg(OwlIndividualBean indiv) {
+		
+		if(indiv == null) {
+			System.out.println("Indiv is null");
+			return;
+		}
+		
+		final Dialog simple = new Dialog();
+		simple.setHeadingText("Info: " + indiv.getName());
+		simple.setBodyStyleName("pad-text");
+		simple.setHeight(300);
+		simple.setWidth(400);
+		simple.setPredefinedButtons(PredefinedButton.OK);
+		simple.setHideOnButtonClick(true);
+
+		if(indiv.getIri() != null) {
+			Label iriLbl = new Label(indiv.getIri());
+			simple.add(iriLbl);
+			System.out.println("Adding iri");
+		}
+		
+		if(indiv.getLabel() != null) {
+			
+			simple.add(new Label("Label: " +indiv.getLabel()));
+			System.out.println("Adding label");
+		}
+
+		if(indiv.getRdfsComment() != null) {
+			Label cmtLbl = new Label(indiv.getRdfsComment());
+			simple.add(new Label("Comment: " + cmtLbl));
+			System.out.println("Adding comment");
+		}
+		
+		if(indiv.getObjectProperties() != null) {
+			VerticalLayoutContainer c = new VerticalLayoutContainer();
+		    simple.add(c);
+		    for(OwlObjectPropertyBean key : indiv.getObjectProperties().keySet()) {
+		    	
+		    	for(final OwlIndividualBean obj : indiv.getObjectProperties().get(key)) {
+			    	Label a = new Label(key + ":" + obj.getName());
+			    	a.addClickHandler(new ClickHandler() {
+
+						public void onClick(ClickEvent event) {
+							showMoreInfoDlg(obj);
+						}
+			    		
+			    	});
+			    	 
+		    		c.add(a);		    		
+		    	}
+		    	
+		    }
+		}
+
+		simple.getBody().addClassName("pad-text");
+		simple.setHideOnButtonClick(true);
+
+		//simple.setWidth(300);
+		simple.show();
+	}
+
+	private void showMoreInfoDlg(OwlClassBean cls) {
+		
+	}
+	
 	private native String getIndivListTemplate() /*-{ 
 	return ['<tpl for=".">', 
 	'<div class="thumb-wrap" id="{name}">', 
