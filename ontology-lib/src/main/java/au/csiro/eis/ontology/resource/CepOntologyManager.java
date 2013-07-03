@@ -1,6 +1,8 @@
 package au.csiro.eis.ontology.resource;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -13,12 +15,16 @@ import org.apache.http.client.ClientProtocolException;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.FileDocumentSource;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
+import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLClass;
+import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
@@ -36,6 +42,7 @@ import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleIRIMapper;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 
+import au.csiro.eis.ontology.beans.OwlIndividualBean;
 import au.csiro.eis.ontology.beans.SparqlSelectResultBean;
 import au.csiro.eis.ontology.beans.SparqlSelectResultSetBean;
 import au.csiro.eis.ontology.beans.config.OntologyConfig;
@@ -77,6 +84,7 @@ public class CepOntologyManager {
 	String tripleStoreEndpoint = null;
 	
 	boolean isSilent = false;
+	boolean isUserGraphUsed  = false;
 	
 	SpinModelManager spinMgr;
 	JenaModelManager jenaModelMgr;
@@ -218,6 +226,21 @@ public class CepOntologyManager {
 		this.isJenaModelManagerInit = result;
 	}
 	
+	private boolean updateJenaModelMgr(File updatedRdfxml) throws OWLOntologyStorageException, IOException, URISyntaxException {
+		if(this.jenaModelMgr == null) {
+			System.out.println("Jena model mgr is null");
+			return false;
+		}
+		
+		boolean result = this.jenaModelMgr.updateInputModel(updatedRdfxml, this.baseUri);
+		if(!result ) {
+			System.out.println("Jena model mgr input model failed to update");
+		}
+		
+		return result;
+	}
+
+	
 	public  Model runSpinInferences() {
 		return spinMgr.runInferences();
 	}
@@ -286,6 +309,16 @@ public class CepOntologyManager {
 		System.out.println("Querying  <"+ userIri +"> from triple store...");
 		return getOntologyAsFile(userIri, repo);
 	}
+
+	public boolean updateTripleStoreWithUserGraph(String userIri, String repo, File rdfxml) throws ClientProtocolException, IOException, URISyntaxException  {
+		String context= "<" + userIri +">";
+		
+		
+		boolean result = SesameHttpUtils.updateFromRDFXML(repo, context, rdfxml);
+		
+		return result;
+	}
+
 	
 	public  File getOntologyAsFile(String base, String repo) throws ClientProtocolException, IOException, URISyntaxException {
 		String context= "<" + base +">";
@@ -341,7 +374,8 @@ public class CepOntologyManager {
 					prefixIndex.put("user", userMapping);
 
 				}
-				//create ontology
+
+				isUserGraphUsed = true;
 				
 			} catch (ClientProtocolException e) {
 				e.printStackTrace();
@@ -765,4 +799,93 @@ public class CepOntologyManager {
 
 		return resultSetBean;
 	}
+
+
+	public int addOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException {
+		int numSuccessfulSteps = 0; 
+		
+		boolean isTripleStoreUpdated = false;
+		boolean isJenaModelUpdated = false;
+		boolean hasChanges = false;
+		
+        OWLClass parentClass = dataFactory.getOWLClass(IRI.create(indiv.getType().getIri()));
+
+		
+		//add this as individual using owl api
+
+		OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(
+                parentClass, this.toIndividual(indiv));
+		
+		
+        // Add the class assertion
+        List<OWLOntologyChange> listOfChanges = ontologyMgr.addAxiom(defaultOntology, classAssertion);
+        
+        if(listOfChanges != null) {
+        	hasChanges = true;
+        	numSuccessfulSteps++; //has changes
+        	
+        	if(this.isUserGraphUsed) {
+        		File f = null;
+        		numSuccessfulSteps++; //has changes and user graph used
+            				
+        		//serialise the user graph to rdfxml and post to triple store
+        		//assume the usergraph is maintained at the default ontology
+        		
+        		try {
+        			f = File.createTempFile("ontTemp", ".rdf");
+        			FileOutputStream fos = new FileOutputStream(f);
+					ontologyMgr.saveOntology(this.defaultOntology, new RDFXMLOntologyFormat(), fos);
+					
+		        	
+        		
+	        		//poke the changes through to triple store
+	        		if(f != null) {
+	        			numSuccessfulSteps++; //successfully seriliazed to rdfxml
+	        			
+	                	
+	        			isTripleStoreUpdated = this.updateTripleStoreWithUserGraph(userIri, tripleStoreEndpoint, f);
+	        			
+
+	        			if(isTripleStoreUpdated) {
+	        				numSuccessfulSteps++; //successfully updated triple store
+	        				
+			        		//update jena model
+		        			isJenaModelUpdated = updateJenaModelMgr(f);
+		        			if(isJenaModelUpdated) {
+		        				numSuccessfulSteps++; //successfully updated jena
+		        			}
+		        			
+	        			}
+	        		}
+	        		
+        		} catch (OWLOntologyStorageException e) {
+					e.printStackTrace();
+					throw new OntologyInitException("Could not serialise user graph file for updating triple store. " + e.getLocalizedMessage());					
+				} catch (IOException e) {
+					e.printStackTrace();
+					throw new OntologyInitException("Could not create file for storing user graph file to update triple store. " + e.getLocalizedMessage());
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+					throw new OntologyInitException("Error in request URI . " + e.getLocalizedMessage());
+				}
+        		
+        		
+        	}
+        	
+        	
+        }
+		
+        return numSuccessfulSteps;
+        
+	}
+	
+	private OWLIndividual toIndividual(OwlIndividualBean indiv) {
+		OWLIndividual modelIndiv = null;
+		
+		return modelIndiv;
+	}
+
+
+	
+	
 }

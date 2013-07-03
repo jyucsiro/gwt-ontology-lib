@@ -20,6 +20,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.vocab.SWRLBuiltInsVocabulary;
 
 import com.google.gson.Gson;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.query.Query;
@@ -545,6 +546,14 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 		
 		return this.ontMediator.getOntIndividual(indivIri, skipPropMappings, resolveParents);	
 	}
-	
+
+	@Override
+	public int addOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException {
+		checkHasServiceInitialised();
+		
+		return this.ontMediator.addOwlIndividual(indiv);	
+	}
+
+
 	
 }

@@ -2,6 +2,7 @@ package au.csiro.eis.ontology.openrdf.sesame.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,8 +16,15 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
@@ -195,6 +203,48 @@ public class SesameHttpUtils {
 		}
 	
 	// convert InputStream to String
+	//expects a valid resultFile
+	private static File getFileFromInputStream(InputStream is, File resultFile) throws IOException {
+
+			
+			FileOutputStream outputStream =  new FileOutputStream(resultFile);
+			try {
+
+				int read = 0;
+				byte[] bytes = new byte[1024];
+		 
+				while ((read = is.read(bytes)) != -1) {
+					outputStream.write(bytes, 0, read);
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} finally {
+				if (is != null) {
+					try {
+						is.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+				if (outputStream != null) {
+					try {
+						// outputStream.flush();
+						outputStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+		 
+				}
+			}
+
+			return resultFile;
+
+		}
+	
+
+	
+	// convert InputStream to String
 	private static String getStringFromInputStream(InputStream is) {
 
 		BufferedReader br = null;
@@ -223,4 +273,105 @@ public class SesameHttpUtils {
 		return sb.toString();
 
 	}
+	
+
+	public static  boolean updateFromRDFXML(String server, String context, File content) throws ClientProtocolException, IOException, URISyntaxException {
+		String uriToCreate = server;
+
+		if(context != null) {
+			String encodedContext = URLEncoder.encode(context, "UTF-8");
+			uriToCreate = server + "?context=" + encodedContext;
+		}
+		URI httpCall = URI.create(uriToCreate); 
+
+		String format = "application/rdf+xml";
+		//HttpStatus.SC_NO_CONTENT
+		return postFileViaHttp(httpCall, format, content);		
+	}
+	
+	public static boolean postFileViaHttp(URI uri, String contentFormat, File content) throws ClientProtocolException, IOException, URISyntaxException {
+		boolean result= false;
+		int statusCode = updateCallViaHttp(uri, contentFormat, null, content, "POST", null); //expect nothing to be returned
+		
+		//check if status is no content
+		if(statusCode == HttpStatus.SC_NO_CONTENT) {
+			result = true;
+		}
+
+		return result;
+	}
+
+	
+	//updates any entity content returned to the input result file by reference 
+	public static int updateCallViaHttp(URI uri, String contentFormat, String acceptFormat, File content, String method, File resultFile) throws ClientProtocolException, IOException, URISyntaxException {
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		
+		HttpRequestBase httpRequest = null;
+		
+		if(method != null && method.equals("POST")) {
+			httpRequest = new HttpPost(uri);
+		}
+		else if(method != null && method.equals("GET")) {
+			httpRequest = new HttpGet(uri);
+		}
+		else if(method != null && method.equals("PUT")) {
+			httpRequest = new HttpPut(uri);
+		}
+		else if(method != null && method.equals("DELETE")) {
+			httpRequest = new HttpDelete(uri);
+		}
+		else {
+			return -1;
+		}
+
+
+		if(acceptFormat != null) {
+			httpRequest.addHeader("Accept", acceptFormat);
+		}
+		else {
+			httpRequest.addHeader("Accept", "application/rdf+xml");
+		}
+		
+		
+		if(content != null && (method.equals("POST") || method.equals("PUT")) ) {
+			InputStreamEntity reqEntity = new InputStreamEntity(new FileInputStream(content), -1);
+            reqEntity.setContentType(contentFormat);
+            reqEntity.setChunked(true);
+        
+            //for POST and PUT
+            if(httpRequest instanceof HttpEntityEnclosingRequestBase) {
+            	HttpEntityEnclosingRequestBase httpEntityReq = (HttpEntityEnclosingRequestBase) httpRequest;
+            	httpEntityReq.setEntity(reqEntity);
+            }
+		}
+		
+		System.out.println(httpRequest.getURI());
+
+		HttpResponse response1 = httpclient.execute(httpRequest);
+
+		int statusCode = -1;
+		try { 
+			statusCode = response1.getStatusLine().getStatusCode();
+			if(statusCode == HttpStatus.SC_OK ) { //if it is a 200 ok, read the entity and save to file
+		        System.out.println(response1.getStatusLine());
+				HttpEntity entity1 = response1.getEntity();
+				// do something useful with the response body
+				Header responseContentType = entity1.getContentType();
+				System.out.println(responseContentType.toString());
+
+				if(resultFile != null) {
+					resultFile = getFileFromInputStream(entity1.getContent(), resultFile);
+				}
+	
+				EntityUtils.consume(entity1);
+			}	
+			//EntityUtils.consume(entity1);
+		} finally {
+			httpRequest.releaseConnection();
+		}
+
+		return statusCode;
+	}
+
+	
 }

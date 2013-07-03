@@ -754,5 +754,12 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 		this.ontBeanFactory = ontBeanFactory;
 	}
 
+	@Override
+	public int addOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException {
+		
+		return this.cepOntMgr.addOwlIndividual(indiv);
+		
+	}
+
 	
 }

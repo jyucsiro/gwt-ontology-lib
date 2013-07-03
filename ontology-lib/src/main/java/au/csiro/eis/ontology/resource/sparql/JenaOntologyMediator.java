@@ -118,6 +118,12 @@ public class JenaOntologyMediator implements OntologyMediatorInterface {
 		return null;
 	}
 
+	@Override
+	public boolean addOwlIndividual(OwlIndividualBean indiv) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 	

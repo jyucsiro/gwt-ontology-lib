@@ -2,6 +2,7 @@ package au.csiro.eis.ontology.resource.jena;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -70,6 +71,27 @@ public class JenaModelManager {
 		return result;
 	}
 	
+	public boolean updateInputModel(File updatedRdfXml, String baseUri) throws ClientProtocolException, FileNotFoundException, IOException, URISyntaxException {
+		
+		if(updatedRdfXml == null) {
+			return false;
+		}
+		
+		if(this.inputModel != null) {
+			//update
+			OntModel model1 = getOntologyDefAsModel(new FileInputStream(updatedRdfXml), baseUri);
+
+			Model diff = this.inputModel.difference(model1);
+			this.inputModel.add(diff);
+			this.inputModel.commit();
+			
+			return true;
+		}
+
+		return false;
+	}
+
+	
 
 	private OntModel convertOwlApiOntologyToJenaOntModel(String base, OWLOntology ontology, OWLOntologyManager ontMgr) throws OWLOntologyStorageException, IOException, URISyntaxException {
 		System.out.println("Converting owlapi ontology to Jena OntModel");
@@ -128,4 +150,5 @@ public class JenaModelManager {
 		// TODO Auto-generated method stub
 		return this.inputModel;
 	}
+
 }

@@ -60,6 +60,8 @@ public interface OntologyMediatorInterface {
 	
 	public boolean isSubclassOf(String iri, String parentIri, boolean isDirect) ;
 
+	public int addOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException;
+
 	
 	//public String generateVsensor(String vsName, WqCepRule rule) ;
 }

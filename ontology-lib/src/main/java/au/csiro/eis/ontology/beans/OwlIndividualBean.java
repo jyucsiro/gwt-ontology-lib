@@ -64,6 +64,7 @@ public class OwlIndividualBean  extends RdfResourceBean implements Serializable,
 	public Map<OwlObjectPropertyBean, Set<OwlIndividualBean>> getObjectProperties() {
 		return objectProperties;
 	}
+	
 
 	public void setObjectProperties(
 			Map<OwlObjectPropertyBean, Set<OwlIndividualBean>> objectProperties) {

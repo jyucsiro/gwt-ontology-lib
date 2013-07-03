@@ -80,7 +80,17 @@ public class OwlDataPropertyBean implements Serializable, IsSerializable {
 		
 	}
 
-	
+
+	public OwlDataPropertyBean(String propertyIri) {
+		this.propertyIri = propertyIri;
+	}
+
+	public OwlDataPropertyBean(String propertyIri, String filler, String datatypeIri) {
+		this.propertyIri = propertyIri;
+		this.filler = filler;
+		this.type = datatypeIri;
+	}
+
 	
 	public String getProperty() {
 		return property;
