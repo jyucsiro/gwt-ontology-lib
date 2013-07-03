@@ -1000,7 +1000,7 @@ public class CepOntologyManager {
 		if(indivBean.getRdfsComment() != null) {
 			OWLAnnotation commentAnnotation = dataFactory.getOWLAnnotation(
 					dataFactory.getRDFSComment(),
-					dataFactory.getOWLLiteral(indivBean.getLabel(), "en"));
+					dataFactory.getOWLLiteral(indivBean.getRdfsComment(), "en"));
 
 			if(indiv instanceof OWLNamedIndividual) {
 				OWLNamedIndividual i = (OWLNamedIndividual) indiv;

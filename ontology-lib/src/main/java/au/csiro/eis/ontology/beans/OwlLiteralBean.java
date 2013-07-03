@@ -17,7 +17,13 @@ public class OwlLiteralBean  implements Serializable, IsSerializable {
 	public OwlLiteralBean() {
 		
 	}
-	
+
+	public OwlLiteralBean(String literal, String datatypeIri, String lang) {
+		this.literal = literal;
+		this.datatypeIri = datatypeIri;
+		this.lang = lang;
+	}
+
 	public String getLang() {
 		return lang;
 	}
