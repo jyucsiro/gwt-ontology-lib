@@ -81,9 +81,8 @@ public class JenaModelManager {
 			//update
 			OntModel model1 = getOntologyDefAsModel(new FileInputStream(updatedRdfXml), baseUri);
 
-			Model diff = this.inputModel.difference(model1);
-			this.inputModel.add(diff);
-			this.inputModel.commit();
+			this.inputModel.add(model1);
+			//this.inputModel.commit();
 			
 			return true;
 		}

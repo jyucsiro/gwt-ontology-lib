@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,13 +17,22 @@ import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.FileDocumentSource;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
+import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
+import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataProperty;
+import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLIndividual;
+import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -41,8 +51,12 @@ import org.semanticweb.owlapi.util.DefaultPrefixManager;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleIRIMapper;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
+import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
+import au.csiro.eis.ontology.beans.OwlDataPropertyBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
+import au.csiro.eis.ontology.beans.OwlLiteralBean;
+import au.csiro.eis.ontology.beans.OwlObjectPropertyBean;
 import au.csiro.eis.ontology.beans.SparqlSelectResultBean;
 import au.csiro.eis.ontology.beans.SparqlSelectResultSetBean;
 import au.csiro.eis.ontology.beans.config.OntologyConfig;
@@ -136,7 +150,8 @@ public class CepOntologyManager {
 		prefixIndex = new HashMap<String, OntologyConfigMapping>();	
 		spinMgr = new SpinModelManager(tripleStoreEndpoint);
 		
-		
+		jenaModelMgr = new JenaModelManager();
+
 
 	}
 	
@@ -808,23 +823,92 @@ public class CepOntologyManager {
 		boolean isJenaModelUpdated = false;
 		boolean hasChanges = false;
 		
-        OWLClass parentClass = dataFactory.getOWLClass(IRI.create(indiv.getType().getIri()));
-
+		if(indiv == null) {
+			return -1;
+		}
 		
+		List<OWLOntologyChange> listOfChanges = new ArrayList<OWLOntologyChange>();
+
 		//add this as individual using owl api
+		System.out.println("Creating OWL API instance of indiv..." );
 
-		OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(
-                parentClass, this.toIndividual(indiv));
+		OWLIndividual owlIndiv = this.toIndividual(indiv);
+
+		Set<OWLAxiom> listOfAxioms  = new HashSet<OWLAxiom>();
 		
 		
-        // Add the class assertion
-        List<OWLOntologyChange> listOfChanges = ontologyMgr.addAxiom(defaultOntology, classAssertion);
+		//get parent class (if defined)
+		OWLClass parentClass = null;
+		if(indiv.getType() != null) {
+			String parentClassIri = indiv.getType().getIri();
+		
+			if(parentClassIri != null) {
+				System.out.println("Adding class->instance assertion: " + parentClassIri);
+				
+				parentClass = dataFactory.getOWLClass(IRI.create(parentClassIri));
+				
+				
+				OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(
+		                parentClass, owlIndiv);
+				
+				listOfAxioms.add(classAssertion);
+				
+				/*
+		        // Add the class assertion
+		        List<OWLOntologyChange> changes2 = ontologyMgr.addAxiom(defaultOntology, classAssertion);
+		    	
+		        if(changes2 != null) {
+		        	listOfChanges.addAll(changes2);
+		        }
+		        */		        
+			}
+			else {
+				System.out.println("Instance type cannot be null");
+				return -1;
+			}
+
+		}
+		else {
+			System.out.println("Instance type cannot be null");
+			return -1;
+		}
+		
+		
+		//get list of addAxioms
+		System.out.println("Getting list of assertions from indiv... ");
+		List<OWLAxiom> listOfAxiomsFromIndiv = this.getAddAxiomsFromIndividualBean(indiv, owlIndiv);
+		
+		if(listOfAxiomsFromIndiv != null) {
+	        listOfAxioms.addAll(listOfAxiomsFromIndiv);
+		}
+
+
+		
         
         if(listOfChanges != null) {
         	hasChanges = true;
         	numSuccessfulSteps++; //has changes
-        	
-        	if(this.isUserGraphUsed) {
+            	
+    		//create temp ontology to keep new statements
+    		OWLOntology tempontology = null;
+            try {
+            	tempontology = ontologyMgr.createOntology();
+            	ontologyMgr.addAxioms(tempontology, listOfAxioms);
+    		} catch (OWLOntologyCreationException e1) {
+    			// TODO Auto-generated catch block
+    			e1.printStackTrace();
+    			throw new OntologyInitException("Could not create temp ontology." + e1.getLocalizedMessage());
+    		}
+
+            
+            
+        	if(tempontology != null && this.isUserGraphUsed) {
+        		//update changes to default ontology
+            	ontologyMgr.addAxioms(this.defaultOntology, listOfAxioms);
+            	
+            	
+            	System.out.println("User graph used... ");
+        		
         		File f = null;
         		numSuccessfulSteps++; //has changes and user graph used
             				
@@ -832,9 +916,10 @@ public class CepOntologyManager {
         		//assume the usergraph is maintained at the default ontology
         		
         		try {
+        			System.out.println("Serializing ontology...");
         			f = File.createTempFile("ontTemp", ".rdf");
         			FileOutputStream fos = new FileOutputStream(f);
-					ontologyMgr.saveOntology(this.defaultOntology, new RDFXMLOntologyFormat(), fos);
+					ontologyMgr.saveOntology(tempontology, new RDFXMLOntologyFormat(), fos);
 					
 		        	
         		
@@ -842,7 +927,7 @@ public class CepOntologyManager {
 	        		if(f != null) {
 	        			numSuccessfulSteps++; //successfully seriliazed to rdfxml
 	        			
-	                	
+	        			System.out.println("Updating triple store ...");	
 	        			isTripleStoreUpdated = this.updateTripleStoreWithUserGraph(userIri, tripleStoreEndpoint, f);
 	        			
 
@@ -850,6 +935,7 @@ public class CepOntologyManager {
 	        				numSuccessfulSteps++; //successfully updated triple store
 	        				
 			        		//update jena model
+	        				System.out.println("Updating Jena store ...");
 		        			isJenaModelUpdated = updateJenaModelMgr(f);
 		        			if(isJenaModelUpdated) {
 		        				numSuccessfulSteps++; //successfully updated jena
@@ -879,13 +965,132 @@ public class CepOntologyManager {
         
 	}
 	
+	//assume indiv and owlIndiv is set
+	private List<OWLAxiom> getAddAxiomsFromIndividualBean(OwlIndividualBean indivBean, OWLIndividual indiv) {
+
+		if(indiv == null && indivBean == null) {
+			return null;
+		}
+		
+		List<OWLAxiom> list = new ArrayList<OWLAxiom>();
+
+		
+		//add any rdfs:label, rdfs:comment or annotation props
+		if(indivBean.getLabel() != null) {
+			OWLAnnotation labelAnnotation = dataFactory.getOWLAnnotation(
+					dataFactory.getRDFSLabel(),
+					dataFactory.getOWLLiteral(indivBean.getLabel(), "en"));
+	        
+			if(indiv instanceof OWLNamedIndividual) {
+				OWLNamedIndividual i = (OWLNamedIndividual) indiv;
+				
+				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(i.getIRI(), labelAnnotation);
+				list.add(ax);
+				
+			}
+			else if(indiv instanceof OWLAnonymousIndividual) {
+				OWLAnonymousIndividual anon = (OWLAnonymousIndividual) indiv;
+				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(anon, labelAnnotation);
+				list.add(ax);
+			}
+
+			
+		}
+		
+		if(indivBean.getRdfsComment() != null) {
+			OWLAnnotation commentAnnotation = dataFactory.getOWLAnnotation(
+					dataFactory.getRDFSComment(),
+					dataFactory.getOWLLiteral(indivBean.getLabel(), "en"));
+
+			if(indiv instanceof OWLNamedIndividual) {
+				OWLNamedIndividual i = (OWLNamedIndividual) indiv;
+				
+				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(i.getIRI(), commentAnnotation);
+				list.add(ax);
+				
+			}
+			else if(indiv instanceof OWLAnonymousIndividual) {
+				OWLAnonymousIndividual anon = (OWLAnonymousIndividual) indiv;
+				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(anon, commentAnnotation);
+				list.add(ax);
+			}
+			
+		}
+		
+		
+		//get list of data props
+		if(indivBean.getDataProperties() != null) {
+			for(OwlDataPropertyBean dataPropBean : indivBean.getDataProperties().keySet()) {
+				 OWLDataProperty dataProp = dataFactory.getOWLDataProperty(IRI.create(dataPropBean.getPropertyIri()));
+	
+				 for(OwlLiteralBean literalBean : indivBean.getDataProperties().get(dataPropBean)) {
+					 OWLLiteral literal = this.toLiteral(literalBean);
+					 
+					 OWLDataPropertyAssertionAxiom assertion = dataFactory
+				                .getOWLDataPropertyAssertionAxiom(dataProp, indiv, literal);
+				     
+					 list.add(assertion);
+				 }   
+			}
+		}
+		
+		//get list of obj props
+		if(indivBean.getObjectProperties() != null) {
+			for(OwlObjectPropertyBean objPropBean : indivBean.getObjectProperties().keySet()) {
+				 OWLObjectProperty objProp = dataFactory.getOWLObjectProperty(IRI.create(objPropBean.getPropertyIri()));
+
+				 for(OwlIndividualBean assocIndivBean : indivBean.getObjectProperties().get(objPropBean)) {
+					 OWLIndividual assocIndiv = this.toIndividual(assocIndivBean);
+					 
+					OWLObjectPropertyAssertionAxiom assertion = dataFactory
+				                .getOWLObjectPropertyAssertionAxiom(objProp, indiv, assocIndiv);
+					 
+					 list.add(assertion);				 
+				 }   
+			}			
+		}
+
+	        
+	        
+		return list;
+	}
+
+
 	private OWLIndividual toIndividual(OwlIndividualBean indiv) {
+		if(indiv == null) {
+			return null;
+		}
+		
 		OWLIndividual modelIndiv = null;
+		
+		//if indiv has its iri defined
+		if(indiv.getIri() != null) {
+			modelIndiv = dataFactory.getOWLNamedIndividual(IRI.create(indiv.getIri()));
+		}
+		else {
+	        modelIndiv = dataFactory.getOWLAnonymousIndividual();			
+		}
+		
+
+		//set any properties
+		
 		
 		return modelIndiv;
 	}
 
 
+	private OWLLiteral toLiteral(OwlLiteralBean literalBean) {
+		OWLLiteral literal = null;
+		 if(literalBean.getDatatypeIri() != null) {
+			 literal = dataFactory.getOWLLiteral(literalBean.getLiteral(), 
+					 								OWL2Datatype.getDatatype(IRI.create(literalBean.getDatatypeIri())));	 
+		 }
+		 else {
+			 literal = dataFactory.getOWLLiteral(literalBean.getLiteral());
+		 }				 
+	
+		 return literal;
+	}
 	
 	
 }
