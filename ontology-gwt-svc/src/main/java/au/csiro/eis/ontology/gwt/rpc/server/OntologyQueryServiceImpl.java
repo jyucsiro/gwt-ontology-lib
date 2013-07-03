@@ -554,6 +554,12 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 		return this.ontMediator.addOwlIndividual(indiv);	
 	}
 
+	@Override
+	public int deleteOwlIndividual(OwlIndividualBean indiv)
+			throws OntologyInitException {
+		return this.ontMediator.deleteOwlIndividual(indiv);	
+	}
+
 
 	
 }

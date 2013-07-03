@@ -762,7 +762,7 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 	}
 
 	@Override
-	public int addDeleteIndividual(OwlIndividualBean indiv)
+	public int deleteOwlIndividual(OwlIndividualBean indiv)
 			throws OntologyInitException {
 		
 		return this.cepOntMgr.deleteOwlIndividual(indiv);
