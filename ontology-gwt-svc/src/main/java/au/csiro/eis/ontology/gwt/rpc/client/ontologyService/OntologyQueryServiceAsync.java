@@ -73,4 +73,6 @@ public interface OntologyQueryServiceAsync {
 	void getRdfResource(String iri_string, AsyncCallback<RdfResourceBean> callback);
 	void addOwlIndividual(OwlIndividualBean vsensorIndiv,
 			AsyncCallback<Integer> asyncCallback);
+	void deleteOwlIndividual(OwlIndividualBean vsensorIndiv,
+			AsyncCallback<Integer> asyncCallback);
 }

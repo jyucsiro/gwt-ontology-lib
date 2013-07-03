@@ -83,6 +83,8 @@ public interface OntologyQueryService extends RemoteService {
 	RdfResourceBean getRdfResource(String iri_string) throws OntologyInitException;
 	
 	int addOwlIndividual(OwlIndividualBean vsensorIndiv) throws OntologyInitException;
+	
+	int deleteOwlIndividual(OwlIndividualBean vsensorIndiv) throws OntologyInitException;
 
 
 }

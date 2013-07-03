@@ -71,17 +71,25 @@ public class JenaModelManager {
 		return result;
 	}
 	
-	public boolean updateInputModel(File updatedRdfXml, String baseUri) throws ClientProtocolException, FileNotFoundException, IOException, URISyntaxException {
+	public boolean updateInputModel(File updatedRdfXml, String baseUri, boolean deleteAllFirst) throws ClientProtocolException, FileNotFoundException, IOException, URISyntaxException  {
 		
 		if(updatedRdfXml == null) {
 			return false;
 		}
 		
 		if(this.inputModel != null) {
+
+			if(deleteAllFirst) {
+				this.inputModel.removeAll();
+			}
+			
 			//update
 			OntModel model1 = getOntologyDefAsModel(new FileInputStream(updatedRdfXml), baseUri);
 
 			this.inputModel.add(model1);
+
+			this.inputModel.loadImports();
+
 			//this.inputModel.commit();
 			
 			return true;

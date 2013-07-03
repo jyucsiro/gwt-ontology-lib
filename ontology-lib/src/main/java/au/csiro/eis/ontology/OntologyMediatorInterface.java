@@ -62,6 +62,8 @@ public interface OntologyMediatorInterface {
 
 	public int addOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException;
 
+	public int addDeleteIndividual(OwlIndividualBean indiv) throws OntologyInitException;
+
 	
 	//public String generateVsensor(String vsName, WqCepRule rule) ;
 }

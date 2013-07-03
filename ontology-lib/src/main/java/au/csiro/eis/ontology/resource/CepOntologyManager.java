@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -48,6 +49,7 @@ import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.reasoner.structural.StructuralReasonerFactory;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.util.OWLEntityRemover;
 import org.semanticweb.owlapi.util.QNameShortFormProvider;
 import org.semanticweb.owlapi.util.SimpleIRIMapper;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
@@ -242,12 +244,16 @@ public class CepOntologyManager {
 	}
 	
 	private boolean updateJenaModelMgr(File updatedRdfxml) throws OWLOntologyStorageException, IOException, URISyntaxException {
+		return updateJenaModelMgr(updatedRdfxml, false) ;
+	}
+	
+	private boolean updateJenaModelMgr(File updatedRdfxml, boolean deleteAllFirst) throws IOException, URISyntaxException {
 		if(this.jenaModelMgr == null) {
 			System.out.println("Jena model mgr is null");
 			return false;
 		}
 		
-		boolean result = this.jenaModelMgr.updateInputModel(updatedRdfxml, this.baseUri);
+		boolean result = this.jenaModelMgr.updateInputModel(updatedRdfxml, this.baseUri, deleteAllFirst);
 		if(!result ) {
 			System.out.println("Jena model mgr input model failed to update");
 		}
@@ -844,9 +850,7 @@ public class CepOntologyManager {
 		
 			if(parentClassIri != null) {
 				System.out.println("Adding class->instance assertion: " + parentClassIri);
-				
 				parentClass = dataFactory.getOWLClass(IRI.create(parentClassIri));
-				
 				
 				OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(
 		                parentClass, owlIndiv);
@@ -882,10 +886,7 @@ public class CepOntologyManager {
 	        listOfAxioms.addAll(listOfAxiomsFromIndiv);
 		}
 
-
-		
-        
-        if(listOfChanges != null) {
+		if(listOfChanges != null) {
         	hasChanges = true;
         	numSuccessfulSteps++; //has changes
             	
@@ -1091,6 +1092,122 @@ public class CepOntologyManager {
 	
 		 return literal;
 	}
+
+
+	public int deleteOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException {
+		
+		boolean isTripleStorePutSuccess = false; 
+		boolean isJenaModelUpdated = false;
+		
+   		//delete from owl api
+    	OWLEntityRemover remover = new OWLEntityRemover(this.ontologyMgr, Collections.singleton(this.defaultOntology));
+        System.out.println("Number of individuals: "
+                + this.defaultOntology.getIndividualsInSignature().size());
+        // Loop through each individual that is referenced in the pizza
+        // ontology, and ask it to accept a visit from the entity remover. The
+        // remover will automatically accumulate the changes which are necessary
+        // to remove the individual from the ontologies (the pizza ontology)
+        // which it knows about
+        for (OWLNamedIndividual ind : this.defaultOntology.getIndividualsInSignature()) {
+        	IRI iri = ind.getIRI();
+        	String beanIri = indiv.getIri();
+        	
+        	if(iri != null && beanIri != null && iri.toString().equals(indiv.getIri())) {
+                ind.accept(remover);        		
+        	}        	
+        }
+        // Now we get all of the changes from the entity remover, which should
+        // be applied to remove all of the individuals that we have visited from
+        // the pizza ontology. Notice that "batch" deletes can essentially be
+        // performed - we simply visit all of the classes, properties and
+        // individuals that we want to remove and then apply ALL of the changes
+        // after using the entity remover to collect them
+        List<OWLOntologyChange> changes = this.ontologyMgr.applyChanges(remover.getChanges());
+
+        if(changes == null || changes.size() == 0) {
+        	return 0;
+        }
+        
+        File stmtsFile = null;
+		//serialise the temp ontology
+		System.out.println("Serializing ontology...");
+		try {
+			stmtsFile = File.createTempFile("ontTemp", ".rdf");
+			FileOutputStream fos = new FileOutputStream(stmtsFile);
+			ontologyMgr.saveOntology(this.defaultOntology, new RDFXMLOntologyFormat(), fos);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			throw new OntologyInitException("Could not create temp ontology." + e1.getLocalizedMessage());
+		} catch (OWLOntologyStorageException e) {
+			e.printStackTrace();
+			throw new OntologyInitException("Could not create temp ontology." + e.getLocalizedMessage());
+		}
+
+        
+		//delete from triplestore
+    	if(this.isUserGraphUsed && stmtsFile != null) {
+			System.out.println("Deleting context statements from triple store ...");
+
+			try {
+				/*
+				//delete selected staetments from triple store
+				Map<String,String> params = new HashMap<String,String>();
+				params.put("subj", "<"+indiv.getIri()+">");
+				params.put("obj", "<"+indiv.getIri()+">");
+				*/
+				
+		        //delete ALL statements in the triple store
+				boolean isTripleStoreDeleteSuccess = this.deleteStatementsInTripleStoreWithUserGraph(userIri, tripleStoreEndpoint);
+				if(isTripleStoreDeleteSuccess) {
+					System.out.println("Adding context statements back to triple store ...");
+			        isTripleStorePutSuccess = this.addStatementsToTripleStoreWithUserGraph(userIri, tripleStoreEndpoint, stmtsFile);
+				}
+				
+				//delete from jena
+		    	boolean deleteAllFirst=  true;
+	    		isJenaModelUpdated = updateJenaModelMgr(stmtsFile, deleteAllFirst);
+	    		
+			} catch (IOException e) {
+				e.printStackTrace();
+				throw new OntologyInitException("Could not create temp ontology file." + e.getLocalizedMessage());
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+				throw new OntologyInitException("Could not create temp ontology - URI exception." + e.getLocalizedMessage());
+			}
+    	}
+
+		
+    	if(isTripleStorePutSuccess && isJenaModelUpdated) {
+    		return 0; //successful
+    	}
+    	else if(!isTripleStorePutSuccess) {
+    		return 1;
+    	}
+    	else if(!isJenaModelUpdated) {
+    		return 2;
+    	}
+ 
+    	
+		return -1;
+	}
 	
+	private boolean addStatementsToTripleStoreWithUserGraph(String userIri, String repo, File stmtsFile) throws ClientProtocolException, IOException, URISyntaxException {
+		String context= "<" + userIri +">";		
+		
+		boolean result = SesameHttpUtils.putStatementsFromContext(repo, context, stmtsFile);
+		
+		return result;
+		
+	}
+
+
+	public boolean deleteStatementsInTripleStoreWithUserGraph(String userIri, String repo) throws ClientProtocolException, IOException, URISyntaxException  {
+		String context= "<" + userIri +">";
+		
+		
+		boolean result = SesameHttpUtils.deleteStatementsFromContext(repo, context);
+		
+		return result;
+	}
 	
 }

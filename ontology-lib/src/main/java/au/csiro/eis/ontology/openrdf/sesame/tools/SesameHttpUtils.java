@@ -275,20 +275,6 @@ public class SesameHttpUtils {
 	}
 	
 
-	public static  boolean updateFromRDFXML(String server, String context, File content) throws ClientProtocolException, IOException, URISyntaxException {
-		String uriToCreate = server;
-
-		if(context != null) {
-			String encodedContext = URLEncoder.encode(context, "UTF-8");
-			uriToCreate = server + "?context=" + encodedContext;
-		}
-		URI httpCall = URI.create(uriToCreate); 
-
-		String format = "application/rdf+xml";
-		//HttpStatus.SC_NO_CONTENT
-		return postFileViaHttp(httpCall, format, content);		
-	}
-	
 	public static boolean postFileViaHttp(URI uri, String contentFormat, File content) throws ClientProtocolException, IOException, URISyntaxException {
 		boolean result= false;
 		int statusCode = updateCallViaHttp(uri, contentFormat, null, content, "POST", null); //expect nothing to be returned
@@ -374,4 +360,70 @@ public class SesameHttpUtils {
 	}
 
 	
+	public static  boolean updateFromRDFXML(String server, String context, File content) throws ClientProtocolException, IOException, URISyntaxException {
+		String uriToCreate = server;
+
+		if(context != null) {
+			String encodedContext = URLEncoder.encode(context, "UTF-8");
+			uriToCreate = server + "?context=" + encodedContext;
+		}
+		URI httpCall = URI.create(uriToCreate); 
+
+		String format = "application/rdf+xml";
+		//HttpStatus.SC_NO_CONTENT
+		return postFileViaHttp(httpCall, format, content);		
+	}
+
+
+	public static boolean deleteStatementsFromContext(String server, String context)	throws ClientProtocolException, IOException, URISyntaxException {
+		String uriToCreate = server;
+
+		if(context != null) {
+			String encodedContext = URLEncoder.encode(context, "UTF-8");
+			uriToCreate = server + "?context=" + encodedContext;
+		}
+		URI httpCall = URI.create(uriToCreate); 
+
+		return deleteViaHttp(httpCall);		
+	}
+
+	private static boolean deleteViaHttp(URI uri) throws ClientProtocolException, IOException, URISyntaxException {
+		boolean result= false;
+		int statusCode = updateCallViaHttp(uri, null, null, null, "DELETE", null); //expect nothing to be returned
+		
+		//check if status is no content
+		if(statusCode == HttpStatus.SC_NO_CONTENT) {
+			result = true;
+		}
+
+		return result;
+	}
+
+	public static boolean putStatementsFromContext(String server, String context, File content) throws ClientProtocolException, IOException, URISyntaxException {
+		String uriToCreate = server;
+
+		if(context != null) {
+			String encodedContext = URLEncoder.encode(context, "UTF-8");
+			uriToCreate = server + "?context=" + encodedContext;
+		}
+		URI httpCall = URI.create(uriToCreate); 
+
+		String format = "application/rdf+xml";
+		//HttpStatus.SC_NO_CONTENT
+		return putFileViaHttp(httpCall, format, content);		
+	}
+
+	private static boolean putFileViaHttp(URI uri, String contentFormat, File content) throws ClientProtocolException, IOException, URISyntaxException {
+		boolean result= false;
+		int statusCode = updateCallViaHttp(uri, contentFormat, null, content, "PUT", null); //expect nothing to be returned
+		
+		//check if status is no content
+		if(statusCode == HttpStatus.SC_NO_CONTENT) {
+			result = true;
+		}
+
+		return result;
+	}
+
+
 }
