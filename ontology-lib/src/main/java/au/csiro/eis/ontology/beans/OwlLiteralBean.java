@@ -18,6 +18,7 @@ public class OwlLiteralBean extends AbstractRdfResourceBean  implements Serializ
 		
 	}
 
+
 	public OwlLiteralBean(String literal, String datatypeIri, String lang) {
 		this.literal = literal;
 		this.datatypeIri = datatypeIri;

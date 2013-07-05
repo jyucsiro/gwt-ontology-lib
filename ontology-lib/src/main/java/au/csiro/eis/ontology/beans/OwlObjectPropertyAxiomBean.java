@@ -6,6 +6,10 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 public class OwlObjectPropertyAxiomBean extends OwlAxiomBean implements Serializable, IsSerializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String propertyIri;
 	OwlIndividualBean domain;
 	OwlIndividualBean range;
