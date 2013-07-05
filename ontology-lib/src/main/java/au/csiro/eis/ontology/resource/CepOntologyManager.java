@@ -906,7 +906,7 @@ public class CepOntologyManager {
         	if(tempontology != null && this.isUserGraphUsed) {
         		//update changes to default ontology
             	ontologyMgr.addAxioms(this.defaultOntology, listOfAxioms);
-            	
+            	this.reasoner.flush();
             	
             	System.out.println("User graph used... ");
         		
@@ -1114,7 +1114,7 @@ public class CepOntologyManager {
         	
         	if(iri != null && beanIri != null && iri.toString().equals(indiv.getIri())) {
                 ind.accept(remover);        		
-        	}        	
+        	}   
         }
         // Now we get all of the changes from the entity remover, which should
         // be applied to remove all of the individuals that we have visited from
@@ -1124,6 +1124,8 @@ public class CepOntologyManager {
         // after using the entity remover to collect them
         List<OWLOntologyChange> changes = this.ontologyMgr.applyChanges(remover.getChanges());
 
+        this.reasoner.flush();
+        
         if(changes == null || changes.size() == 0) {
         	return 0;
         }

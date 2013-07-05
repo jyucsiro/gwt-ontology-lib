@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
-public class RdfResourceBean implements Serializable , IsSerializable{
+public class RdfResourceBean extends AbstractRdfResourceBean implements Serializable , IsSerializable{
 
 	/**
 	 * 

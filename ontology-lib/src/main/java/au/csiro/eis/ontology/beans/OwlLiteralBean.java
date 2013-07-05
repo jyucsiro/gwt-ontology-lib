@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 
-public class OwlLiteralBean  implements Serializable, IsSerializable {
+public class OwlLiteralBean extends AbstractRdfResourceBean  implements Serializable, IsSerializable {
 	/**
 	 * 
 	 */
