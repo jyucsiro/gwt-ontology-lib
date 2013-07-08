@@ -560,6 +560,13 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 		return this.ontMediator.deleteOwlIndividual(indiv);	
 	}
 
+	@Override
+	public boolean exists(String iri) {
+		return this.ontMediator.exists(iri);
+		
+	}
 
+
+	
 	
 }

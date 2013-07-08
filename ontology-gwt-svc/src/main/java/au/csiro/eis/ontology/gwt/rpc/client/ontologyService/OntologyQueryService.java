@@ -86,5 +86,7 @@ public interface OntologyQueryService extends RemoteService {
 	
 	int deleteOwlIndividual(OwlIndividualBean vsensorIndiv) throws OntologyInitException;
 
+	boolean exists(String iri);
+
 
 }

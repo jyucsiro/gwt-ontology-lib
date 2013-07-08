@@ -769,5 +769,18 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 
 	}
 
+	@Override
+	public boolean exists(String iri) {
+		for(OWLOntology ont : this.cepOntMgr.getOntologies()) {
+			
+			if(ont.containsEntityInSignature(IRI.create(iri))) {
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+
 	
 }

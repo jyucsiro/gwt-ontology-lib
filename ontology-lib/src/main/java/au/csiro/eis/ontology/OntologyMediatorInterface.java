@@ -65,6 +65,8 @@ public interface OntologyMediatorInterface {
 
 	public int deleteOwlIndividual(OwlIndividualBean indiv) throws OntologyInitException;
 
+	public boolean exists(String iri);
+
 	
 	//public String generateVsensor(String vsName, WqCepRule rule) ;
 }

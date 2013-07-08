@@ -75,4 +75,5 @@ public interface OntologyQueryServiceAsync {
 			AsyncCallback<Integer> asyncCallback);
 	void deleteOwlIndividual(OwlIndividualBean indiv,
 			AsyncCallback<Integer> asyncCallback);
+	void exists(String iri, AsyncCallback<Boolean> asyncCallback);
 }

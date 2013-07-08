@@ -131,6 +131,12 @@ public class JenaOntologyMediator implements OntologyMediatorInterface {
 		return 0;
 	}
 
+	@Override
+	public boolean exists(String iri) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 	
