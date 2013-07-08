@@ -52,4 +52,42 @@ public class OwlDataPropertyAxiomBean extends OwlAxiomBean implements Serializab
 		
 	}
 
+
+	public String getPropertyIri() {
+		return propertyIri;
+	}
+
+
+	public void setPropertyIri(String propertyIri) {
+		this.propertyIri = propertyIri;
+	}
+
+
+	public OwlIndividualBean getDomain() {
+		return domain;
+	}
+
+
+	public void setDomain(OwlIndividualBean domain) {
+		this.domain = domain;
+	}
+
+
+	public OwlLiteralBean getRange() {
+		return range;
+	}
+
+
+	public void setRange(OwlLiteralBean range) {
+		this.range = range;
+	}
+
+
+	public String getType() {
+		return type;
+	}
+	
+	
+	
+
 }

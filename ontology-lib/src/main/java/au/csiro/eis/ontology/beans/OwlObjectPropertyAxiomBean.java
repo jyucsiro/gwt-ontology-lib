@@ -66,6 +66,41 @@ public class OwlObjectPropertyAxiomBean extends OwlAxiomBean implements Serializ
 		this.setLabel(sb.toString());
 		
 	}
+
+
+	public String getPropertyIri() {
+		return propertyIri;
+	}
+
+
+	public void setPropertyIri(String propertyIri) {
+		this.propertyIri = propertyIri;
+	}
+
+
+	public OwlIndividualBean getDomain() {
+		return domain;
+	}
+
+
+	public void setDomain(OwlIndividualBean domain) {
+		this.domain = domain;
+	}
+
+
+	public OwlIndividualBean getRange() {
+		return range;
+	}
+
+
+	public void setRange(OwlIndividualBean range) {
+		this.range = range;
+	}
+
+
+	public String getType() {
+		return type;
+	}
 	
 	
 }
