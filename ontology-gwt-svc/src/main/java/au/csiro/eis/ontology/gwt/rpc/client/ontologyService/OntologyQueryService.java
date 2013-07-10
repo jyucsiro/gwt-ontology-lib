@@ -2,6 +2,7 @@ package au.csiro.eis.ontology.gwt.rpc.client.ontologyService;
 
 import java.util.List;
 
+import au.csiro.eis.ontology.beans.OwlAxiomBean;
 import au.csiro.eis.ontology.beans.OwlClassBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
 import au.csiro.eis.ontology.beans.OwlObjectPropertyBean;

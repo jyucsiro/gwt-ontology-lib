@@ -30,6 +30,7 @@ import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.ResultSetFormatter;
 import au.csiro.eis.ontology.OntologyMediatorInterface;
+import au.csiro.eis.ontology.beans.OwlAxiomBean;
 import au.csiro.eis.ontology.beans.OwlClassBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
 import au.csiro.eis.ontology.beans.OwlOntologyBean;
@@ -565,7 +566,6 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 		return this.ontMediator.exists(iri);
 		
 	}
-
 
 	
 	

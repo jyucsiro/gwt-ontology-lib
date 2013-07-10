@@ -258,6 +258,18 @@ public class SpinModelManager {
 	public void setInferencingPerformed(boolean inferencingPerformed) {
 		this.inferencingPerformed = inferencingPerformed;
 	}
-	
+
+	/**
+	 * Updates the input model. Spin rules stay the same
+	 * @return
+	 */
+	public boolean updateInputModel(OntModel inputModel) {
+		this.inputModel = inputModel;
+		
+		this.runInferences();
+		
+		
+		return true;
+	}
 	
 }

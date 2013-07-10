@@ -1,6 +1,8 @@
 package au.csiro.eis.ontology;
 
 import java.util.List;
+
+import au.csiro.eis.ontology.beans.OwlAxiomBean;
 import au.csiro.eis.ontology.beans.OwlClassBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
 import au.csiro.eis.ontology.beans.OwlObjectPropertyBean;

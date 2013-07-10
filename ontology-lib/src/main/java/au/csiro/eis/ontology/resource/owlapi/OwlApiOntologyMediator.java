@@ -1,36 +1,20 @@
 package au.csiro.eis.ontology.resource.owlapi;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 
-import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLClassExpression;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
-import org.semanticweb.owlapi.model.OWLIndividual;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 import org.semanticweb.owlapi.model.OWLPropertyExpression;
 import org.semanticweb.owlapi.model.OWLSubClassOfAxiom;
@@ -39,25 +23,17 @@ import org.semanticweb.owlapi.reasoner.Node;
 import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
-import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
 import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.vocab.SWRLBuiltInsVocabulary;
 
 import au.csiro.eis.ontology.OntologyMediatorInterface;
 import au.csiro.eis.ontology.beans.OwlClassBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
-import au.csiro.eis.ontology.beans.OwlObjectPropertyBean;
 import au.csiro.eis.ontology.beans.OwlOntologyBean;
 import au.csiro.eis.ontology.beans.SwrlBuiltInBean;
-import au.csiro.eis.ontology.beans.WqCepRule;
-import au.csiro.eis.ontology.beans.config.OntologyConfig;
-import au.csiro.eis.ontology.beans.config.OntologyConfigMapping;
 import au.csiro.eis.ontology.exception.OntologyInitException;
 import au.csiro.eis.ontology.owlapi.tools.RestrictionVisitor;
 import au.csiro.eis.ontology.resource.CepOntologyManager;
-import au.csiro.eis.utils.FileIOUtils;
-
-import com.google.gson.Gson;
 
 
 public class OwlApiOntologyMediator implements OntologyMediatorInterface {
@@ -781,6 +757,7 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 		
 		return false;
 	}
+
 
 	
 }

@@ -55,9 +55,14 @@ import org.semanticweb.owlapi.util.SimpleIRIMapper;
 import org.semanticweb.owlapi.util.SimpleShortFormProvider;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 
+import au.csiro.eis.ontology.beans.OwlAxiomBean;
+import au.csiro.eis.ontology.beans.OwlClassAssertionAxiomBean;
+import au.csiro.eis.ontology.beans.OwlClassBean;
+import au.csiro.eis.ontology.beans.OwlDataPropertyAxiomBean;
 import au.csiro.eis.ontology.beans.OwlDataPropertyBean;
 import au.csiro.eis.ontology.beans.OwlIndividualBean;
 import au.csiro.eis.ontology.beans.OwlLiteralBean;
+import au.csiro.eis.ontology.beans.OwlObjectPropertyAxiomBean;
 import au.csiro.eis.ontology.beans.OwlObjectPropertyBean;
 import au.csiro.eis.ontology.beans.SparqlSelectResultBean;
 import au.csiro.eis.ontology.beans.SparqlSelectResultSetBean;
@@ -827,6 +832,8 @@ public class CepOntologyManager {
 		
 		boolean isTripleStoreUpdated = false;
 		boolean isJenaModelUpdated = false;
+		boolean isSpinModelUpdated = false;
+
 		boolean hasChanges = false;
 		
 		if(indiv == null) {
@@ -940,6 +947,13 @@ public class CepOntologyManager {
 		        			isJenaModelUpdated = updateJenaModelMgr(f);
 		        			if(isJenaModelUpdated) {
 		        				numSuccessfulSteps++; //successfully updated jena
+		        				
+		        				System.out.println("Updating SPIN inferences ...");
+			        			isSpinModelUpdated = updateSpinModelMgr();
+			        			if(isSpinModelUpdated) {
+			        				numSuccessfulSteps++; 
+			        			}
+			        				
 		        			}
 		        			
 	        			}
@@ -966,6 +980,18 @@ public class CepOntologyManager {
         
 	}
 	
+	private boolean updateSpinModelMgr() {
+		//get input model from jena model mgr
+		OntModel inputModel = this.jenaModelMgr.getInputModel();
+
+		if(inputModel == null) 
+			return false;
+		
+		return this.spinMgr.updateInputModel(inputModel);
+		
+	}
+
+
 	//assume indiv and owlIndiv is set
 	private List<OWLAxiom> getAddAxiomsFromIndividualBean(OwlIndividualBean indivBean, OWLIndividual indiv) {
 
@@ -1211,5 +1237,8 @@ public class CepOntologyManager {
 		
 		return result;
 	}
+
+
+
 	
 }
