@@ -887,7 +887,7 @@ public class CepOntologyManager {
 		
 		//get list of addAxioms
 		System.out.println("Getting list of assertions from indiv... ");
-		List<OWLAxiom> listOfAxiomsFromIndiv = this.getAddAxiomsFromIndividualBean(indiv, owlIndiv);
+		List<OWLAxiom> listOfAxiomsFromIndiv = this.getAddAxiomsFromIndividualBean(indiv, owlIndiv, null);
 		
 		if(listOfAxiomsFromIndiv != null) {
 	        listOfAxioms.addAll(listOfAxiomsFromIndiv);
@@ -993,11 +993,18 @@ public class CepOntologyManager {
 
 
 	//assume indiv and owlIndiv is set
-	private List<OWLAxiom> getAddAxiomsFromIndividualBean(OwlIndividualBean indivBean, OWLIndividual indiv) {
+	private List<OWLAxiom> getAddAxiomsFromIndividualBean(OwlIndividualBean indivBean, OWLIndividual indiv, Map<OwlIndividualBean, Boolean> visitedIndivIdx) {
 
 		if(indiv == null && indivBean == null) {
 			return null;
 		}
+		
+		if(visitedIndivIdx == null) {
+			//create the hashmap
+			visitedIndivIdx = new HashMap<OwlIndividualBean, Boolean>();
+		}
+		
+		visitedIndivIdx.put(indivBean, true);
 		
 		List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
@@ -1069,10 +1076,18 @@ public class CepOntologyManager {
 				 for(OwlIndividualBean assocIndivBean : indivBean.getObjectProperties().get(objPropBean)) {
 					 OWLIndividual assocIndiv = this.toIndividual(assocIndivBean);
 					 
+					 
 					OWLObjectPropertyAssertionAxiom assertion = dataFactory
 				                .getOWLObjectPropertyAssertionAxiom(objProp, indiv, assocIndiv);
 					 
-					 list.add(assertion);				 
+					 list.add(assertion);			
+					 
+					 //check if we have visited the assocIndivBean before
+					 if(visitedIndivIdx.get(assocIndivBean) == null || visitedIndivIdx.get(assocIndivBean).booleanValue()==false) {
+						 //if not, ensure the axioms for assocIndiv also obtained
+						 List<OWLAxiom> assocIndivAxList = this.getAddAxiomsFromIndividualBean(assocIndivBean, assocIndiv, visitedIndivIdx);
+						 list.addAll(assocIndivAxList);
+					 }
 				 }   
 			}			
 		}
@@ -1083,6 +1098,8 @@ public class CepOntologyManager {
 	}
 
 
+	
+	
 	private OWLIndividual toIndividual(OwlIndividualBean indiv) {
 		if(indiv == null) {
 			return null;
