@@ -834,69 +834,36 @@ public class CepOntologyManager {
 		boolean isJenaModelUpdated = false;
 		boolean isSpinModelUpdated = false;
 
-		boolean hasChanges = false;
 		
 		if(indiv == null) {
 			return -1;
 		}
 		
-		List<OWLOntologyChange> listOfChanges = new ArrayList<OWLOntologyChange>();
 
 		//add this as individual using owl api
 		System.out.println("Creating OWL API instance of indiv..." );
 
-		OWLIndividual owlIndiv = this.toIndividual(indiv);
-
+		
 		Set<OWLAxiom> listOfAxioms  = new HashSet<OWLAxiom>();
 		
-		
-		//get parent class (if defined)
-		OWLClass parentClass = null;
-		if(indiv.getType() != null) {
-			String parentClassIri = indiv.getType().getIri();
-		
-			if(parentClassIri != null) {
-				System.out.println("Adding class->instance assertion: " + parentClassIri);
-				parentClass = dataFactory.getOWLClass(IRI.create(parentClassIri));
-				
-				OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(
-		                parentClass, owlIndiv);
-				
-				listOfAxioms.add(classAssertion);
-				
-				/*
-		        // Add the class assertion
-		        List<OWLOntologyChange> changes2 = ontologyMgr.addAxiom(defaultOntology, classAssertion);
-		    	
-		        if(changes2 != null) {
-		        	listOfChanges.addAll(changes2);
-		        }
-		        */		        
-			}
-			else {
-				System.out.println("Instance type cannot be null");
-				return -1;
-			}
+		OWLIndividual owlIndiv = this.toIndividual(indiv);
 
-		}
-		else {
-			System.out.println("Instance type cannot be null");
-			return -1;
-		}
-		
 		
 		//get list of addAxioms
 		System.out.println("Getting list of assertions from indiv... ");
 		List<OWLAxiom> listOfAxiomsFromIndiv = this.getAddAxiomsFromIndividualBean(indiv, owlIndiv, null);
 		
+		
 		if(listOfAxiomsFromIndiv != null) {
-	        listOfAxioms.addAll(listOfAxiomsFromIndiv);
+			System.out.println("Number of axioms to add from indiv... " + listOfAxiomsFromIndiv.size());
+			listOfAxioms.addAll(listOfAxiomsFromIndiv);
 		}
 
-		if(listOfChanges != null) {
-        	hasChanges = true;
+		System.out.println("Number of axioms to add... " + listOfAxioms.size());
+		if(listOfAxioms.size() > 0) {
         	numSuccessfulSteps++; //has changes
             	
+    		System.out.println("Creating OWL API ontology for new statements... ");
     		//create temp ontology to keep new statements
     		OWLOntology tempontology = null;
             try {
@@ -912,7 +879,8 @@ public class CepOntologyManager {
             
         	if(tempontology != null && this.isUserGraphUsed) {
         		//update changes to default ontology
-            	ontologyMgr.addAxioms(this.defaultOntology, listOfAxioms);
+        		System.out.println("Adding new axioms for new statements... ");
+        		ontologyMgr.addAxioms(this.defaultOntology, listOfAxioms);
             	this.reasoner.flush();
             	
             	System.out.println("User graph used... ");
@@ -1005,10 +973,49 @@ public class CepOntologyManager {
 		}
 		
 		visitedIndivIdx.put(indivBean, true);
-		
+
 		List<OWLAxiom> list = new ArrayList<OWLAxiom>();
 
+		System.out.println("Indiv: " + indivBean.getIri());
 		
+		//get parent class (if defined)
+		OWLClass parentClass = null;
+		if(indivBean.getType() != null) {
+			String parentClassIri = indivBean.getType().getIri();
+		
+			if(parentClassIri != null) {
+				System.out.println("Adding class->instance assertion: " + parentClassIri);
+				parentClass = dataFactory.getOWLClass(IRI.create(parentClassIri));
+				
+				OWLClassAssertionAxiom classAssertion = dataFactory.getOWLClassAssertionAxiom(
+		                parentClass, indiv);
+				
+				list.add(classAssertion);
+				
+				/*
+		        // Add the class assertion
+		        List<OWLOntologyChange> changes2 = ontologyMgr.addAxiom(defaultOntology, classAssertion);
+		    	
+		        if(changes2 != null) {
+		        	listOfChanges.addAll(changes2);
+		        }
+		        */		        
+			}
+			else {
+				System.out.println("Instance type cannot be null");
+				return null;
+			}
+
+		}
+		else {
+			System.out.println("Instance type cannot be null");
+			return null;
+		}
+		
+
+		
+
+		System.out.println("Getting indiv label and comment");
 		//add any rdfs:label, rdfs:comment or annotation props
 		if(indivBean.getLabel() != null) {
 			OWLAnnotation labelAnnotation = dataFactory.getOWLAnnotation(
@@ -1019,12 +1026,14 @@ public class CepOntologyManager {
 				OWLNamedIndividual i = (OWLNamedIndividual) indiv;
 				
 				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(i.getIRI(), labelAnnotation);
+				System.out.println("Added annotation ax: " + i.getIRI() + ", " + labelAnnotation );
 				list.add(ax);
 				
 			}
 			else if(indiv instanceof OWLAnonymousIndividual) {
 				OWLAnonymousIndividual anon = (OWLAnonymousIndividual) indiv;
 				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(anon, labelAnnotation);
+				System.out.println("Added annotation ax: " + anon.getID() + ", " + labelAnnotation );
 				list.add(ax);
 			}
 
@@ -1040,55 +1049,104 @@ public class CepOntologyManager {
 				OWLNamedIndividual i = (OWLNamedIndividual) indiv;
 				
 				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(i.getIRI(), commentAnnotation);
+				 System.out.println("Added annotation ax: " + i.getIRI() + ", " + commentAnnotation );
+
 				list.add(ax);
 				
 			}
 			else if(indiv instanceof OWLAnonymousIndividual) {
 				OWLAnonymousIndividual anon = (OWLAnonymousIndividual) indiv;
 				OWLAxiom ax = dataFactory.getOWLAnnotationAssertionAxiom(anon, commentAnnotation);
+				System.out.println("Added annotation ax: " + anon.getID() + ", " + commentAnnotation );
 				list.add(ax);
 			}
 			
 		}
 		
 		
+		System.out.println("Getting indiv data props");
 		//get list of data props
 		if(indivBean.getDataProperties() != null) {
 			for(OwlDataPropertyBean dataPropBean : indivBean.getDataProperties().keySet()) {
-				 OWLDataProperty dataProp = dataFactory.getOWLDataProperty(IRI.create(dataPropBean.getPropertyIri()));
-	
-				 for(OwlLiteralBean literalBean : indivBean.getDataProperties().get(dataPropBean)) {
-					 OWLLiteral literal = this.toLiteral(literalBean);
-					 
-					 OWLDataPropertyAssertionAxiom assertion = dataFactory
-				                .getOWLDataPropertyAssertionAxiom(dataProp, indiv, literal);
-				     
-					 list.add(assertion);
-				 }   
+				if(dataPropBean.getPropertyIri() != null) {
+					 OWLDataProperty dataProp = dataFactory.getOWLDataProperty(IRI.create(dataPropBean.getPropertyIri()));
+		
+					 for(OwlLiteralBean literalBean : indivBean.getDataProperties().get(dataPropBean)) {
+						 OWLLiteral literal = this.toLiteral(literalBean);
+						 
+						 if(literal!=null){
+							 OWLDataPropertyAssertionAxiom assertion = dataFactory
+						                .getOWLDataPropertyAssertionAxiom(dataProp, indiv, literal);
+							 
+							 System.out.println("Added axiom: " + dataPropBean.getPropertyIri() + ", " + indivBean.getIri() + ", " + literal);
+							 
+							 list.add(assertion);
+						 }
+						 else {
+							 System.out.println("literal in data prop is null");		 
+						 }
+					 }
+				}
+				else {
+					System.out.println("indiv data prop is null");			
+				}
 			}
 		}
 		
 		//get list of obj props
+		System.out.println("Getting indiv obj props");
 		if(indivBean.getObjectProperties() != null) {
+			
+			//loop thorugh each objProp for indiv
 			for(OwlObjectPropertyBean objPropBean : indivBean.getObjectProperties().keySet()) {
-				 OWLObjectProperty objProp = dataFactory.getOWLObjectProperty(IRI.create(objPropBean.getPropertyIri()));
+				if(objPropBean.getPropertyIri() != null) {
+					 OWLObjectProperty objProp = dataFactory.getOWLObjectProperty(IRI.create(objPropBean.getPropertyIri()));
+	
+					 //loop through each associated indivBean for  obj prop 
+					 for(OwlIndividualBean assocIndivBean : indivBean.getObjectProperties().get(objPropBean)) {
+						 OWLIndividual assocIndiv = this.toIndividual(assocIndivBean);
+						 
+						 
+						 if(assocIndiv != null) {
+							OWLObjectPropertyAssertionAxiom assertion = dataFactory
+						                .getOWLObjectPropertyAssertionAxiom(objProp, indiv, assocIndiv);
 
-				 for(OwlIndividualBean assocIndivBean : indivBean.getObjectProperties().get(objPropBean)) {
-					 OWLIndividual assocIndiv = this.toIndividual(assocIndivBean);
-					 
-					 
-					OWLObjectPropertyAssertionAxiom assertion = dataFactory
-				                .getOWLObjectPropertyAssertionAxiom(objProp, indiv, assocIndiv);
-					 
-					 list.add(assertion);			
-					 
-					 //check if we have visited the assocIndivBean before
-					 if(visitedIndivIdx.get(assocIndivBean) == null || visitedIndivIdx.get(assocIndivBean).booleanValue()==false) {
-						 //if not, ensure the axioms for assocIndiv also obtained
-						 List<OWLAxiom> assocIndivAxList = this.getAddAxiomsFromIndividualBean(assocIndivBean, assocIndiv, visitedIndivIdx);
-						 list.addAll(assocIndivAxList);
+							 System.out.println("Added axiom: " + objPropBean.getPropertyIri() + ", " + indivBean.getIri() + ", " + assocIndivBean.getIri());
+							 list.add(assertion);
+					
+							 //check if the assocIndivBean already exists
+							 boolean indivExists = false;
+							 System.out.println("Checking if assocIndivBean exists or has been visited already: " + assocIndivBean.getIri());
+							 if(assocIndivBean.getIri() != null) {
+								 for(OWLOntology ont : this.ontologies) {
+									 if(ont.containsIndividualInSignature(IRI.create(assocIndivBean.getIri()))){
+										 indivExists = true;
+									 }
+								 }
+							 }
+							 
+							 
+							 //check if we have visited the assocIndivBean before
+							 if(!indivExists && (visitedIndivIdx.get(assocIndivBean) == null || visitedIndivIdx.get(assocIndivBean).booleanValue()==false)) {
+		  						 System.out.println("Processing nested indiv bean axioms indiv from obj prop - " + objPropBean.getPropertyIri() + ": " + assocIndivBean.getIri());
+		
+								 //if not, ensure the axioms for assocIndiv also obtained
+								 List<OWLAxiom> assocIndivAxList = this.getAddAxiomsFromIndividualBean(assocIndivBean, assocIndiv, visitedIndivIdx);
+								 
+								 if(assocIndivAxList != null) {
+									 System.out.println("Adding nested indiv bean axioms: " + assocIndivAxList.size() );
+									 list.addAll(assocIndivAxList);
+								 }
+							 }
+							 else {
+								 System.out.println("assocIndivBean exists or has been visited already");
+							 }
+						 }
 					 }
-				 }   
+				}
+				else {
+					 System.out.println("indiv obj prop iri is null");						
+				}
 			}			
 		}
 
@@ -1098,6 +1156,7 @@ public class CepOntologyManager {
 	}
 
 
+	
 	
 	
 	private OWLIndividual toIndividual(OwlIndividualBean indiv) {
@@ -1125,6 +1184,11 @@ public class CepOntologyManager {
 
 	private OWLLiteral toLiteral(OwlLiteralBean literalBean) {
 		OWLLiteral literal = null;
+		
+		if(literalBean == null || literalBean.getLiteral() == null) {
+			return null;
+		}
+		
 		 if(literalBean.getDatatypeIri() != null) {
 			 literal = dataFactory.getOWLLiteral(literalBean.getLiteral(), 
 					 								OWL2Datatype.getDatatype(IRI.create(literalBean.getDatatypeIri())));	 
