@@ -567,6 +567,18 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 		
 	}
 
+	@Override
+	public boolean importNamedGraphViaSparqlDescribeQuery(String query, String sparqlEndpoint, String namedGraph) {
+		return this.ontMediator.importNamedGraphViaSparqlDescribeQuery(query, sparqlEndpoint, namedGraph);
+		
+	}
+
+	@Override
+	public boolean removeNamedGraph(String namedGraph) {
+		return this.ontMediator.removeNamedGraph(namedGraph);
+
+	}
+
 	
 	
 }

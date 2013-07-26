@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.client.ClientProtocolException;
 import org.semanticweb.owlapi.model.OWLOntology;
@@ -28,6 +30,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 public class JenaModelManager {
 	OntModel inputModel;
 	Model outputModel;
+	Map<String, Model> namedGraphs;
 	
 	String baseUriString;
 	
@@ -35,6 +38,7 @@ public class JenaModelManager {
 	public JenaModelManager() {
 		inputModel = null;
 		this.baseUriString = null;
+		namedGraphs = new HashMap<String,Model>();
 	}
 	
 	public boolean initInputModel(OWLOntology ontology, OWLOntologyManager ontMgr, String base) {
@@ -156,6 +160,20 @@ public class JenaModelManager {
 	public OntModel getInputModel() {
 		// TODO Auto-generated method stub
 		return this.inputModel;
+	}
+
+	public void addNamedGraph(Model resultModel, String namedGraph) {
+		this.inputModel.add(resultModel);
+		this.namedGraphs.put(namedGraph, resultModel);
+		
+	}
+
+	public void removeNamedGraph(String namedGraph) {
+		Model m = this.namedGraphs.remove(namedGraph);
+		if(m != null)
+			this.inputModel.remove(m);
+		
+		return;
 	}
 
 }

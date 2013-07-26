@@ -138,6 +138,19 @@ public class JenaOntologyMediator implements OntologyMediatorInterface {
 		return false;
 	}
 
+	@Override
+	public boolean importNamedGraphViaSparqlDescribeQuery(String query,
+			String sparqlEndpoint, String namedGraph) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeNamedGraph(String namedGraph) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	
 	
 	

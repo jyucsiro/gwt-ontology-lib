@@ -69,6 +69,11 @@ public interface OntologyMediatorInterface {
 
 	public boolean exists(String iri);
 
+	public boolean importNamedGraphViaSparqlDescribeQuery(String query,
+			String sparqlEndpoint, String namedGraph);
+
+	boolean removeNamedGraph(String namedGraph);
+
 	
 	//public String generateVsensor(String vsName, WqCepRule rule) ;
 }

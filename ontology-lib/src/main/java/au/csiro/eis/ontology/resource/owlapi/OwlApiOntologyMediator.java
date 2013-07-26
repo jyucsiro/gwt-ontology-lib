@@ -291,7 +291,12 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 	
 	
 	public OwlClassBean getOntClass(String iri_string, boolean loadIndividuals, boolean loadParents, boolean loadChildren) {
-        OWLClass ont_cls = this.cepOntMgr.getDataFactory().getOWLClass(IRI.create(iri_string));
+        
+		if(iri_string == null) {
+			return null;
+		}
+		
+		OWLClass ont_cls = this.cepOntMgr.getDataFactory().getOWLClass(IRI.create(iri_string));
         
         return this.ontBeanFactory.convertToOwlClassBean(ont_cls, 0, loadIndividuals, loadParents, loadChildren);		
 	}
@@ -621,10 +626,14 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 			boolean loadParents, boolean loadChildren )
 					throws OntologyInitException {
 
-
+		if(iri_string == null) {
+			return null;
+		}
+		
 		//assumes that the ontologies are all loaded...
 		Set<OWLClass> setOfSubClasses = new TreeSet<OWLClass>();
 
+		
 		OWLClass sensorCls = this.cepOntMgr.getDataFactory().getOWLClass(IRI.create(iri_string));
 		NodeSet<OWLClass> subClses = this.cepOntMgr.getReasoner().getSubClasses(sensorCls, isDirect);
 		for(Node<OWLClass> cls : subClses.getNodes()) {
@@ -758,6 +767,15 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 		return false;
 	}
 
+	@Override
+	public boolean importNamedGraphViaSparqlDescribeQuery(String query,
+			String sparqlEndpoint, String namedGraph) {
+		return this.cepOntMgr.importNamedGraphViaSparqlDescribeQuery(query, sparqlEndpoint, namedGraph);
+	}
 
+	@Override
+	public boolean removeNamedGraph(String namedGraph) {
+		return this.cepOntMgr.removeNamedGraph(namedGraph);
+	}
 	
 }

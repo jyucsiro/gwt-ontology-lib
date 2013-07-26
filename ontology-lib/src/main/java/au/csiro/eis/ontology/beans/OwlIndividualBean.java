@@ -2,6 +2,8 @@ package au.csiro.eis.ontology.beans;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,8 +21,12 @@ public class OwlIndividualBean  extends RdfResourceBean implements Serializable,
 	Map<OwlObjectPropertyBean,Set<OwlIndividualBean>> objectProperties;
 	Map<OwlDataPropertyBean, Set<OwlLiteralBean>> dataProperties;
 	
+	Map<String, Set<AbstractRdfResourceBean>> propIdx; //index based on the string repr of the prop uri 
+
+	
 	public OwlIndividualBean() {
 		super();
+		propIdx = new HashMap<String,Set<AbstractRdfResourceBean>>();
 	}
 	
 	public OwlIndividualBean(String name, String iri) {
@@ -31,18 +37,18 @@ public class OwlIndividualBean  extends RdfResourceBean implements Serializable,
 		type = null;
 		objectProperties = null;
 		dataProperties = null;
+		propIdx = new HashMap<String,Set<AbstractRdfResourceBean>>();
+
 	}
 	
 	public OwlClassBean getType() {
 		return type;
 	}
+
 	public void setType(OwlClassBean type) {
 		this.type = type;
 	}
 
-	
-	
-	
 	
 	
 	public String getLocalName() {
@@ -68,14 +74,67 @@ public class OwlIndividualBean  extends RdfResourceBean implements Serializable,
 
 	public void setObjectProperties(
 			Map<OwlObjectPropertyBean, Set<OwlIndividualBean>> objectProperties) {
-		this.objectProperties = objectProperties;
+		this.objectProperties = objectProperties; 
+		
+		this.updateObjPropIndex();
 	}
 
+
+	private void updateObjPropIndex() {
+		for(OwlObjectPropertyBean key : this.objectProperties.keySet()) {
+			Set<OwlIndividualBean> objectPropSet = this.objectProperties.get(key);
+			if(this.propIdx.get(key.getPropertyIri()) == null) {
+				//convert all to right kind of set
+				Set<AbstractRdfResourceBean> set = new HashSet<AbstractRdfResourceBean>();
+				set.addAll(objectPropSet);
+				this.propIdx.put(key.getPropertyIri(), set);
+			}
+			else { //something already exists
+				Set<AbstractRdfResourceBean> set = this.propIdx.get(key.getPropertyIri());
+				for(OwlIndividualBean indiv : objectPropSet) {
+					
+					if(!set.contains(indiv)) {
+						set.add(indiv);
+					}
+				}
+			}
+		}
+		
+	}
+	
+	private void updateDataPropIndex() {
+		
+		for(OwlDataPropertyBean key : this.dataProperties.keySet()) {
+			Set<OwlLiteralBean> propFillerSet = this.dataProperties.get(key);
+			
+			if(this.propIdx.get(key.getPropertyIri()) == null) {
+				//convert all to right kind of set
+				Set<AbstractRdfResourceBean> set = new HashSet<AbstractRdfResourceBean>();
+				set.addAll(propFillerSet);
+				this.propIdx.put(key.getPropertyIri(), set);
+			}
+			else {
+				Set<AbstractRdfResourceBean> set = this.propIdx.get(key.getPropertyIri());
+
+				for(OwlLiteralBean l : propFillerSet) {
+					if(!set.contains(l)) {
+						set.add(l);
+					}
+				}
+			}
+			
+		}		
+	}
+	
+	public Set<AbstractRdfResourceBean> findPropertyFiller(String propIri) {
+		return this.propIdx.get(propIri);
+	}
 
 	public void setDataProperties(
 			Map<OwlDataPropertyBean, Set<OwlLiteralBean>> dataPropertiesBeanMap) {
 
 		this.dataProperties = dataPropertiesBeanMap;
+		updateDataPropIndex();
 	}
 
 	
@@ -195,9 +254,6 @@ public class OwlIndividualBean  extends RdfResourceBean implements Serializable,
 			}
 			
 		}
-		
-		
-		
 		
 		return sb.toString();
 		

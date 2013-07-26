@@ -1,6 +1,7 @@
 package au.csiro.eis.ontology.resource;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import org.semanticweb.owlapi.io.RDFXMLOntologyFormat;
 import org.semanticweb.owlapi.model.AddAxiom;
 import org.semanticweb.owlapi.model.AddImport;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.ImportChange;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
 import org.semanticweb.owlapi.model.OWLAxiom;
@@ -29,6 +31,7 @@ import org.semanticweb.owlapi.model.OWLClassAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLDataProperty;
 import org.semanticweb.owlapi.model.OWLDataPropertyAssertionAxiom;
+import org.semanticweb.owlapi.model.OWLImportsDeclaration;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
@@ -37,9 +40,11 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyIRIMapper;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.PrefixManager;
+import org.semanticweb.owlapi.model.RemoveImport;
 import org.semanticweb.owlapi.reasoner.ConsoleProgressMonitor;
 import org.semanticweb.owlapi.reasoner.InferenceType;
 import org.semanticweb.owlapi.reasoner.NullReasonerProgressMonitor;
@@ -96,7 +101,10 @@ public class CepOntologyManager {
 	QNameShortFormProvider qnameProvider = new QNameShortFormProvider();	
 	SimpleShortFormProvider shortFormProvider = new SimpleShortFormProvider();
 	Set<OWLOntology> ontologies;
+	Map<String, OWLOntology> namedGraphOntologies;
 
+	Map<String,OWLOntologyIRIMapper> iriMapperindex; //namedgraph iri,mapper
+	
 	OWLDataFactory dataFactory;
 	PrefixManager pm;
 	String baseUri = null;
@@ -126,7 +134,8 @@ public class CepOntologyManager {
 		spinMgr = null;
 		
 		jenaModelMgr = new JenaModelManager();
-
+		namedGraphOntologies = new HashMap<String, OWLOntology>();
+		iriMapperindex = new HashMap<String,OWLOntologyIRIMapper>();
 	}
 	
 	
@@ -302,12 +311,11 @@ public class CepOntologyManager {
 						//map each ontology
 						if(mapping.getIRI() != null && mapping.getPath() != null) {
 							System.out.println("Creating IRI mapper: " + mapping.getIRI() +" :: " + mapping.getPath());
-							this.ontologyMgr.addIRIMapper(
-									new SimpleIRIMapper(
-											IRI.create(mapping.getIRI()), 
-											IRI.create(new File(mapping.getPath()))
-											)
-									);
+							
+							SimpleIRIMapper map = new SimpleIRIMapper( IRI.create(mapping.getIRI()),IRI.create(new File(mapping.getPath())));
+							
+							iriMapperindex.put(mapping.getIRI(),map);
+							this.ontologyMgr.addIRIMapper(map);
 						}
 
 						//index the item
@@ -384,12 +392,10 @@ public class CepOntologyManager {
 					ontologyFile = userGraphFile;
 					ontologyPath = userGraphFile.getPath();
 					//add IRI mapping here.
-					this.ontologyMgr.addIRIMapper(
-							new SimpleIRIMapper(
-										docIri,
-										IRI.create(userGraphFile)
-									)
-							);
+					SimpleIRIMapper map = new SimpleIRIMapper(docIri, IRI.create(userGraphFile));
+
+					this.ontologyMgr.addIRIMapper(map);
+					this.iriMapperindex.put(userIri, map);
 					
 					//add prefix mapping
 					OntologyConfigMapping userMapping = new OntologyConfigMapping();
@@ -1320,6 +1326,94 @@ public class CepOntologyManager {
 	}
 
 
+	public boolean importNamedGraphViaSparqlDescribeQuery(String describeQuery, String sparqlEndpoint, String namedGraph) {
 
+		//if named graph exists - assume update function
+		if(this.namedGraphOntologies.containsKey(namedGraph)) {
+			
+			//delete any existing named graph first;
+			this.removeNamedGraph(namedGraph);
+		}
+		
+		//perform describeQuery on Sparql endpoint
+		QueryExecution qexec = 	QueryExecutionFactory.sparqlService(sparqlEndpoint, describeQuery, namedGraph);
+		Model resultModel = qexec.execDescribe() ;
+		qexec.close() ;
+		
+		//place this in the jena model
+		if(resultModel == null) {
+			return false;
+		}
+		
+		
+		this.jenaModelMgr.addNamedGraph(resultModel, namedGraph);
+		this.updateSpinModelMgr();
+		boolean result = false;
+		
+		try {
+			File temp = File.createTempFile("namedGraph", "rdf");
+			FileOutputStream outputStream = new FileOutputStream(temp); 
+			
+			resultModel.write(outputStream);
+			
+			IRI ontologyIRI = IRI.create(namedGraph);
+			SimpleIRIMapper map = new SimpleIRIMapper(ontologyIRI, IRI.create(temp));
+			this.ontologyMgr.addIRIMapper(map);
+			this.iriMapperindex.put(namedGraph, map);
+			
+			OWLImportsDeclaration importStatement = this.dataFactory.getOWLImportsDeclaration(IRI.create(namedGraph));
+			this.ontologyMgr.applyChange(new AddImport(this.defaultOntology, importStatement));
+			
+			OWLOntology ont = this.ontologyMgr.loadOntology(ontologyIRI);
+			this.namedGraphOntologies.put(namedGraph, ont);
+			this.ontologies.add(ont);
+
+			this.reasoner.flush();
+
+			result = true;
+		} catch (OWLOntologyCreationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = false;
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			result = false;
+		}
+		
+		return result;
+	}
+
+
+	public boolean removeNamedGraph(String namedGraph) {
+
+		
+		this.jenaModelMgr.removeNamedGraph(namedGraph);
+		this.updateSpinModelMgr();
+		boolean result = false;
+		
+		if(this.iriMapperindex.get(namedGraph) != null) {
+
+			OWLOntologyIRIMapper map = this.iriMapperindex.remove(namedGraph);
+			IRI ontologyIRI = IRI.create(namedGraph);
+			this.ontologyMgr.removeIRIMapper(map);
+			
+			OWLImportsDeclaration importStatement = this.dataFactory.getOWLImportsDeclaration(ontologyIRI);
+			this.ontologyMgr.applyChange(new RemoveImport(this.defaultOntology, importStatement));
+			
+			OWLOntology ont = this.namedGraphOntologies.get(namedGraph);
+			
+			this.ontologyMgr.removeOntology(ont);
+		
+			this.ontologies.remove(ont);
+			
+        	this.reasoner.flush();
+
+			result = true;
+		}
+		
+		return result;
+	}
 	
 }

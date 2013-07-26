@@ -89,5 +89,8 @@ public interface OntologyQueryService extends RemoteService {
 
 	boolean exists(String iri);
 
+	boolean importNamedGraphViaSparqlDescribeQuery(String query, String sparqlEndpoint, String namedGraph);
+
+	boolean removeNamedGraph(String namedGraph);
 
 }
