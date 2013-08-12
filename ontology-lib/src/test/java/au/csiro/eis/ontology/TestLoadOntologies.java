@@ -21,7 +21,6 @@ import com.google.gson.Gson;
 
 public class TestLoadOntologies {
 
-	String ontConfigPath = "chaffey_dam_ontology_config.json";
 	boolean isConsoleOutputSilent = false;
 	
 	String defaultPath  = "src/test/resources";
@@ -32,8 +31,15 @@ public class TestLoadOntologies {
 	
 	@Test
 	public void testLoadChaffeyOntologies() throws OntologyInitException {
-		String ontConfigPath = defaultPath + "/chaffey_dam_ontology_config.json";
+		//String ontConfigPath = defaultPath + "/chaffey_domain_ontology_config.json";
+		String ontConfigPath = defaultPath + "/uwda_domain_ontology_config.json";
 
+		File f = new File("");
+		System.out.println("Base dir: " + f.getAbsolutePath());
+		f = new File(ontConfigPath);
+		System.out.println("Base dir: " + f.getAbsolutePath());
+		System.out.println("exists: " + f.exists());
+		
 		OwlApiOntologyMediator ontMediator = new OwlApiOntologyMediator();
 		
 		CepOntologyManager ontologyManager = new CepOntologyManager(getOntologyConfigs(ontConfigPath),isConsoleOutputSilent);

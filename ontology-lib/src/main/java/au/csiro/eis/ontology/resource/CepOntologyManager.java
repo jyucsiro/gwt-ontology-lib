@@ -167,7 +167,9 @@ public class CepOntologyManager {
 		spinMgr = new SpinModelManager(tripleStoreEndpoint);
 		
 		jenaModelMgr = new JenaModelManager();
+		namedGraphOntologies = new HashMap<String, OWLOntology>();
 
+		iriMapperindex = new HashMap<String,OWLOntologyIRIMapper>();
 
 	}
 	
@@ -1326,7 +1328,7 @@ public class CepOntologyManager {
 	}
 
 
-	public boolean importNamedGraphViaSparqlDescribeQuery(String describeQuery, String sparqlEndpoint, String namedGraph) {
+	public boolean importNamedGraphViaSparqlDescribeQuery(String describeQuery, String sparqlEndpoint, String namedGraph, String storedNamedGraph) {
 
 		//if named graph exists - assume update function
 		if(this.namedGraphOntologies.containsKey(namedGraph)) {
@@ -1336,7 +1338,18 @@ public class CepOntologyManager {
 		}
 		
 		//perform describeQuery on Sparql endpoint
-		QueryExecution qexec = 	QueryExecutionFactory.sparqlService(sparqlEndpoint, describeQuery, namedGraph);
+		QueryExecution qexec;
+		if(namedGraph != null) {
+			qexec = 	QueryExecutionFactory.sparqlService(sparqlEndpoint, describeQuery, namedGraph);
+		}
+		else {
+			qexec = 	QueryExecutionFactory.sparqlService(sparqlEndpoint, describeQuery);
+		}
+		
+		if(storedNamedGraph == null) {
+			storedNamedGraph = namedGraph;
+		}
+		
 		Model resultModel = qexec.execDescribe() ;
 		qexec.close() ;
 		
@@ -1346,7 +1359,7 @@ public class CepOntologyManager {
 		}
 		
 		
-		this.jenaModelMgr.addNamedGraph(resultModel, namedGraph);
+		this.jenaModelMgr.addNamedGraph(resultModel, storedNamedGraph);
 		this.updateSpinModelMgr();
 		boolean result = false;
 		
@@ -1356,16 +1369,16 @@ public class CepOntologyManager {
 			
 			resultModel.write(outputStream);
 			
-			IRI ontologyIRI = IRI.create(namedGraph);
+			IRI ontologyIRI = IRI.create(storedNamedGraph);
 			SimpleIRIMapper map = new SimpleIRIMapper(ontologyIRI, IRI.create(temp));
 			this.ontologyMgr.addIRIMapper(map);
-			this.iriMapperindex.put(namedGraph, map);
+			this.iriMapperindex.put(storedNamedGraph, map);
 			
-			OWLImportsDeclaration importStatement = this.dataFactory.getOWLImportsDeclaration(IRI.create(namedGraph));
+			OWLImportsDeclaration importStatement = this.dataFactory.getOWLImportsDeclaration(IRI.create(storedNamedGraph));
 			this.ontologyMgr.applyChange(new AddImport(this.defaultOntology, importStatement));
 			
 			OWLOntology ont = this.ontologyMgr.loadOntology(ontologyIRI);
-			this.namedGraphOntologies.put(namedGraph, ont);
+			this.namedGraphOntologies.put(storedNamedGraph, ont);
 			this.ontologies.add(ont);
 
 			this.reasoner.flush();

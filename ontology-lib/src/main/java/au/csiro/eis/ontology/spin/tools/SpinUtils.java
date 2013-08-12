@@ -46,6 +46,7 @@ public class SpinUtils {
 		boolean singlePass = true;
 
 		SimpleProgressMonitor monitor = new SimpleProgressMonitor("TestSpin");
+		//SimpleProgressMonitor monitor = null;
 		
 		
 		//run SPIN inferences
