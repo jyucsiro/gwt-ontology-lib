@@ -78,7 +78,7 @@ public interface OntologyQueryServiceAsync {
 			AsyncCallback<Integer> asyncCallback);
 	void exists(String iri, AsyncCallback<Boolean> asyncCallback);
 	
-	void importNamedGraphViaSparqlDescribeQuery(String query, String sparqlEndpoint, String namedGraph, AsyncCallback<Boolean> asyncCallback);
+	void importNamedGraphViaSparqlDescribeQuery(String query, String sparqlEndpoint, String namedGraph, String storedNamedGraph, AsyncCallback<Boolean> asyncCallback);
 	void removeNamedGraph(String namedGraph, AsyncCallback<Boolean> asyncCallback);
 
 }

@@ -30,10 +30,8 @@
 			<name>BerkeleyBop Repository</name>
 			<url>http://code.berkeleybop.org/maven/repository/</url>
 		</repository>
-
-
-
 	</repositories>
+
 	<properties>
 		<!-- Convenience property to set the GWT version -->
 		<gwtVersion>2.5.1</gwtVersion>
@@ -68,42 +66,7 @@
 			<type>jar</type>
 		</dependency>
 
-		<dependency>
-			<groupId>au.csiro.wicep.LoginMgr</groupId>
-			<artifactId>LoginMgr</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-			<classifier>sources</classifier>
-			<!-- <scope>system</scope> <systemPath>${project.basedir}/lib/repo/LoginMgr-1.0-SNAPSHOT.jar</systemPath> -->
-		</dependency>
-
-		<dependency>
-			<groupId>au.csiro.cep.notifications</groupId>
-			<artifactId>CepNotifications</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
-			<type>jar</type>
-			<classifier>sources</classifier>
-			<!-- <scope>system</scope> <systemPath>${project.basedir}/lib/repo/CepNotifications-1.0-SNAPSHOT.jar</systemPath> -->
-		</dependency>
-
-		<dependency>
-			<groupId>au.csiro.cep.gsn.vsensorgen</groupId>
-			<artifactId>VsensorGenerator</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-			<classifier>sources</classifier>
-			<!-- <scope>system</scope> <systemPath>${project.basedir}/lib/repo/VsensorGenerator-1.0-SNAPSHOT.jar</systemPath> -->
-		</dependency>
-
-		<dependency>
-			<groupId>au.csiro.wicep.gsn</groupId>
-			<artifactId>GsnModule</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-			<classifier>sources</classifier>
-			<!-- <scope>system</scope> <systemPath>${project.basedir}/lib/repo/GsnModule-1.0-SNAPSHOT.jar</systemPath> -->
-		</dependency>
-
+		
 		<dependency>
 			<groupId>au.csiro.eis</groupId>
 			<artifactId>ontology-gwt-svc</artifactId>
@@ -120,13 +83,6 @@
 			<type>jar</type>
 		</dependency>
 
-		<dependency>
-			<groupId>au.csiro.eis</groupId>
-			<artifactId>RuleLibGwt</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-			<classifier>sources</classifier>
-		</dependency>
 
 		<!-- jars for modules -->
 		<dependency>
@@ -143,34 +99,6 @@
 			<type>jar</type>
 		</dependency>
 
-		<dependency>
-			<groupId>au.csiro.wicep.LoginMgr</groupId>
-			<artifactId>LoginMgr</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>au.csiro.cep.notifications</groupId>
-			<artifactId>CepNotifications</artifactId>
-			<version>1.0.1-SNAPSHOT</version>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>au.csiro.cep.gsn.vsensorgen</groupId>
-			<artifactId>VsensorGenerator</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-		</dependency>
-
-		<dependency>
-			<groupId>au.csiro.wicep.gsn</groupId>
-			<artifactId>GsnModule</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-		</dependency>
-
 
 
 		<dependency>
@@ -187,12 +115,6 @@
 			<type>jar</type>
 		</dependency>
 
-		<dependency>
-			<groupId>au.csiro.eis</groupId>
-			<artifactId>RuleLibGwt</artifactId>
-			<version>${curr.package.version}</version>
-			<type>jar</type>
-		</dependency>
 
 		<!-- other -->
 		<dependency>

@@ -769,8 +769,8 @@ public class OwlApiOntologyMediator implements OntologyMediatorInterface {
 
 	@Override
 	public boolean importNamedGraphViaSparqlDescribeQuery(String query,
-			String sparqlEndpoint, String namedGraph) {
-		return this.cepOntMgr.importNamedGraphViaSparqlDescribeQuery(query, sparqlEndpoint, namedGraph);
+			String sparqlEndpoint, String namedGraph, String storedNamedGraph) {
+		return this.cepOntMgr.importNamedGraphViaSparqlDescribeQuery(query, sparqlEndpoint, namedGraph, storedNamedGraph);
 	}
 
 	@Override

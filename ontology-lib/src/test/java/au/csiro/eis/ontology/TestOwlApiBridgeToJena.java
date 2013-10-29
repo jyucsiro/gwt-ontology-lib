@@ -30,13 +30,13 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 public class TestOwlApiBridgeToJena {
 	OntologyLoader loader ;
-	String tripleStore = "http://waterinformatics1-cdc.it.csiro.au/openrdf-sesame/repositories/event-detection/statements";
-	String chaffey_base = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey-domain";
-	String chaffey_rules_base = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey-rules";
+	String tripleStore = "http://waterinformatics-ext1-cdc.it.csiro.au/openrdf-sesame/repositories/event-detection/statements";
+	String chaffey_base = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/chaffey-domain";
+	String chaffey_rules_base = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/chaffey-rules";
 
-	String chaffey_user = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu";
-	String uwda_base = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-domain";
-	String uwda_rules_base = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-rules";
+	String chaffey_user = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu";
+	String uwda_base = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/uwda-domain";
+	String uwda_rules_base = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/uwda-rules";
 
 	@Before
 	public void setUp() {
@@ -82,10 +82,10 @@ public class TestOwlApiBridgeToJena {
 	
 	private void loadOntologyUsingOwlApi(String base, String rules_base,String repo, OntologyLoader loader) throws ClientProtocolException, OWLOntologyCreationException, IOException, URISyntaxException {
 		loader.initOntologyMgr();
-		loader.overrideImport("http://purl.oclc.org/NET/ssnx/ssn", "http://waterinformatics1-cdc.it.csiro.au/resource/ssn.owl");
-		loader.overrideImport("http://qudt.org/vocab/unit", "http://waterinformatics1-cdc.it.csiro.au/resource/unit.rdf");
-		loader.overrideImport("http://qudt.org/1.1/vocab/unit", "http://waterinformatics1-cdc.it.csiro.au/resource/unit.rdf");
-		loader.overrideImport("http://qudt.org/schema/qudt", "http://waterinformatics1-cdc.it.csiro.au/resource/qudt.ttl");
+		loader.overrideImport("http://purl.oclc.org/NET/ssnx/ssn", "http://waterinformatics-ext1-cdc.it.csiro.au/resource/ssn.owl");
+		loader.overrideImport("http://qudt.org/vocab/unit", "http://waterinformatics-ext1-cdc.it.csiro.au/resource/unit.rdf");
+		loader.overrideImport("http://qudt.org/1.1/vocab/unit", "http://waterinformatics-ext1-cdc.it.csiro.au/resource/unit.rdf");
+		loader.overrideImport("http://qudt.org/schema/qudt", "http://waterinformatics-ext1-cdc.it.csiro.au/resource/qudt.ttl");
 			
 		loader.ignoreImport("http://www.ontologydesignpatterns.org/ont/dul/DUL.owl");
 		
@@ -96,7 +96,7 @@ public class TestOwlApiBridgeToJena {
 	
 	
 	private void queryForMatchingSensorFromEventRule(Model model) {
-		String queryString = "SELECT ?rule ?sensor WHERE { ?rule a <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#ValueConstraintEventRule> . ?rule <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#constraintSensorMatch> ?sensor}";
+		String queryString = "SELECT ?rule ?sensor WHERE { ?rule a <http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/ValueConstraintEventRule> . ?rule <http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/constraintSensorMatch> ?sensor}";
 	
 		  Query query = QueryFactory.create(queryString) ;
 		  QueryExecution qexec = QueryExecutionFactory.create(query, model) ;

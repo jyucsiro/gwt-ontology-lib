@@ -1,0 +1,517 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ed="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#"
+    xmlns="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/uwda-pipe-sensing.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="PumpFeature">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#FeatureOfInterest"/>
+  </owl:Class>
+  <owl:Class rdf:ID="WaterDischarge">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Discharge"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PumpPressureObservationValue">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#ObservationValue"/>
+  </owl:Class>
+  <owl:Class rdf:ID="FlowParameter">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasProperty"/>
+        <owl:someValuesFrom>
+          <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Flow">
+            <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#PhysicalProperty"/>
+            <dc:description>Flow is the volume of a fluid moving past a point in a unit of time. Two things make up flow: the volume of fliuid in a system, and the velocity  moving past a given point. 
+</dc:description>
+          </rdf:Description>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Parameter"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PumpPressureSensor">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#VirtualSensor"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+        <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Pressure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="WaterDischargeParameter">
+    <rdfs:subClassOf rdf:resource="#FlowParameter"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AssetProperty">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="PipeFlowSensorOutput">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamSensorOutput">
+            <owl:equivalentClass>
+              <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                  <rdf:Description rdf:about="http://purl.oclc.org/NET/ssnx/ssn#SensorOutput"/>
+                  <owl:Restriction>
+                    <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasValue"/>
+                    <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#QuantityObservationValue"/>
+                  </owl:Restriction>
+                </owl:intersectionOf>
+              </owl:Class>
+            </owl:equivalentClass>
+          </rdf:Description>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasValue"/>
+            <owl:someValuesFrom>
+              <owl:Class rdf:ID="PipeFlowObservationValue"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="PipeFlowObservation">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="PipeFeature"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+        <owl:allValuesFrom>
+          <owl:Class rdf:ID="PipeFlowSensor"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observationResult"/>
+        <owl:someValuesFrom rdf:resource="#PipeFlowSensorOutput"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Flow"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PipeAssetProperty">
+    <rdfs:subClassOf rdf:resource="#AssetProperty"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="BurstEvent">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="onPipeFeature"/>
+        </owl:onProperty>
+        <owl:allValuesFrom>
+          <owl:Class rdf:about="#PipeFeature"/>
+        </owl:allValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="burstEventStartDate"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Burst event</rdfs:label>
+  </owl:Class>
+  <owl:Class rdf:ID="WaterQualityParameter">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:oneOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Ph">
+            <ed:hasQuantityUnitOfMeasure rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#pH"/>
+          </rdf:Description>
+          <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#TotalPhosphorusObservedProperty"/>
+          <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#TotalNitrogenObservedProperty"/>
+        </owl:oneOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasProperty"/>
+        <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#WaterQualityChemicalProperty"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Parameter"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Discharge">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#PhysicalProperty"/>
+    <owl:equivalentClass rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Flow"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Parameter">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#hasProperty"/>
+        <owl:someValuesFrom rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#Property"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <dc:description>Parameters are combinations of physical properties which suffice to determine the response of the system.</dc:description>
+  </owl:Class>
+  <owl:Class rdf:ID="PVCPipeFeature">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PVC Pipe</rdfs:label>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#PipeFeature"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="pipeCohortQualityIndicator"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="resistanceToCyclicPressure"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="resistanceToSurgePressures"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#PipeFlowObservationValue">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#ObservationValue"/>
+  </owl:Class>
+  <owl:Class rdf:about="#PipeFeature">
+    <rdfs:subClassOf rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#FeatureOfInterest"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="environmentalImpactRisk"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasPreviousBurstHistory"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#BurstEvent"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="pipeInstallationDate"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="spillContainmentAbility"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="damageRiskFromCivilWorks"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="SewerageDischargeParameter">
+    <rdfs:subClassOf rdf:resource="#FlowParameter"/>
+  </owl:Class>
+  <owl:Class rdf:ID="SewerageDischarge">
+    <rdfs:subClassOf rdf:resource="#Discharge"/>
+  </owl:Class>
+  <owl:Class rdf:ID="AsbestosCementPipe">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Asbestos Cement Pipe</rdfs:label>
+    <rdfs:subClassOf rdf:resource="#PipeFeature"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="occludedAirPocketsRisk"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="pressureClass"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="externalSoilEnvironmentRisk"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:DatatypeProperty rdf:ID="airReleaseValveRisk"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#PipeFlowSensor">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#VirtualSensor"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observes"/>
+        <owl:someValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Flow"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="PumpPressureObservation">
+    <rdfs:subClassOf rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamObservation"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#featureOfInterest"/>
+        <owl:allValuesFrom rdf:resource="#PumpFeature"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedProperty"/>
+        <owl:allValuesFrom rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Pressure"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://purl.oclc.org/NET/ssnx/ssn#observedBy"/>
+        <owl:allValuesFrom rdf:resource="#PumpPressureSensor"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="#hasPreviousBurstHistory">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="#BurstEvent"/>
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#onPipeFeature"/>
+    </owl:inverseOf>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="http://purl.oclc.org/NET/ssnx/qu/qu#quantityKind"/>
+  <owl:ObjectProperty rdf:about="#onPipeFeature">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:about="#airReleaseValveRisk">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#environmentalImpactRisk">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#occludedAirPocketsRisk">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#resistanceToSurgePressures">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#pipeCohortQualityIndicator">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#damageRiskFromCivilWorks">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#resistanceToCyclicPressure">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#externalSoilEnvironmentRisk">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#spillContainmentAbility">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#pipeInstallationDate">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="assetAge">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#pressureClass">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#burstEventStartDate">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+  </owl:DatatypeProperty>
+  <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Tairmin">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="http://qudt.org/vocab/unit#DegreeCelsius"/>
+  </rdf:Description>
+  <BurstEvent rdf:ID="BurstEvent1">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <burstEventStartDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2013-04-01</burstEventStartDate>
+    <onPipeFeature>
+      <PVCPipeFeature rdf:ID="Pipe2">
+        <spillContainmentAbility rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+        >3</spillContainmentAbility>
+        <pipeInstallationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+        >2000-01-01</pipeInstallationDate>
+        <damageRiskFromCivilWorks rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+        >1</damageRiskFromCivilWorks>
+        <environmentalImpactRisk rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+        >3</environmentalImpactRisk>
+        <resistanceToSurgePressures rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+        >3</resistanceToSurgePressures>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >PVC Pipe 2</rdfs:label>
+      </PVCPipeFeature>
+    </onPipeFeature>
+  </BurstEvent>
+  <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#DataStreamSensorObservationValue">
+    <owl:equivalentClass rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#QuantityObservationValue"/>
+  </rdf:Description>
+  <owl:NamedIndividual rdf:ID="cubicMetrePerSecond">
+    <rdf:type rdf:resource="#UnitOf-flow"/>
+  </owl:NamedIndividual>
+  <BurstEvent rdf:ID="BurstEvent3">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <burstEventStartDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2013-04-03</burstEventStartDate>
+    <onPipeFeature rdf:resource="#Pipe2"/>
+  </BurstEvent>
+  <PumpFeature rdf:ID="Pump2">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pump 2</rdfs:label>
+  </PumpFeature>
+  <BurstEvent rdf:ID="BurstEvent2">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <burstEventStartDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2013-04-02</burstEventStartDate>
+    <onPipeFeature rdf:resource="#Pipe2"/>
+  </BurstEvent>
+  <ed:Pressure rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#pressure">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="http://qudt.org/vocab/unit#PoundForcePerSquareInch"/>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >pressure</rdfs:label>
+  </ed:Pressure>
+  <PumpFeature rdf:ID="Pump1">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Pump 1</rdfs:label>
+  </PumpFeature>
+  <PVCPipeFeature rdf:ID="Pipe1">
+    <damageRiskFromCivilWorks rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+    >1</damageRiskFromCivilWorks>
+    <pipeInstallationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2013-01-01</pipeInstallationDate>
+    <resistanceToSurgePressures rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+    >1</resistanceToSurgePressures>
+    <spillContainmentAbility rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+    >1</spillContainmentAbility>
+    <environmentalImpactRisk rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+    >1</environmentalImpactRisk>
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >PVC Pipe 1</rdfs:label>
+  </PVCPipeFeature>
+  <owl:AnnotationProperty rdf:about="http://purl.org/dc/elements/1.1/description"/>
+  <BurstEvent rdf:ID="BurstEvent4">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></rdfs:label>
+    <burstEventStartDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+    >2013-04-02</burstEventStartDate>
+    <onPipeFeature>
+      <PVCPipeFeature rdf:ID="Pipe3">
+        <pipeInstallationDate rdf:datatype="http://www.w3.org/2001/XMLSchema#date"
+        >2010-01-01</pipeInstallationDate>
+        <damageRiskFromCivilWorks rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+        >2</damageRiskFromCivilWorks>
+        <environmentalImpactRisk rdf:datatype="http://www.w3.org/2001/XMLSchema#integer"
+        >1</environmentalImpactRisk>
+        <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >PVC Pipe 3</rdfs:label>
+      </PVCPipeFeature>
+    </onPipeFeature>
+  </BurstEvent>
+  <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Tairmax">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="http://qudt.org/vocab/unit#DegreeCelsius"/>
+  </rdf:Description>
+  <owl:NamedIndividual rdf:ID="cubicFeetPerSecond">
+    <rdf:type rdf:resource="#UnitOf-flow"/>
+  </owl:NamedIndividual>
+  <rdf:Description rdf:about="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Air_Temperature">
+    <ed:hasQuantityUnitOfMeasure rdf:resource="http://qudt.org/vocab/unit#DegreeCelsius"/>
+  </rdf:Description>
+  <owl:NamedIndividual rdf:ID="flow">
+    <rdfs:label rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >flow</rdfs:label>
+    <rdf:type rdf:resource="http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#Flow"/>
+  </owl:NamedIndividual>
+  <owl:NamedIndividual rdf:ID="litrePerSecond">
+    <rdf:type rdf:resource="#UnitOf-flow"/>
+  </owl:NamedIndividual>
+</rdf:RDF>
+
+<!-- Created with TopBraid -->

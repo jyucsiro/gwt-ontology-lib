@@ -461,7 +461,7 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 
 	
 	private void queryForMatchingSensorFromEventRule() throws OntologyInitException {
-		String rulesUri = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/chaffey-rules";
+		String rulesUri = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/chaffey-rules";
 		
 		//run inferences on spin model
 		try {
@@ -471,7 +471,7 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 			OntModel model = this.cepOntMgr.getSpinModelManager().getSpinModel();
 			
 			
-			String queryString = "SELECT ?rule ?sensor WHERE { ?rule a <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#ValueConstraintEventRule> . ?rule <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection.owl#constraintSensorMatch> ?sensor}";
+			String queryString = "SELECT ?rule ?sensor WHERE { ?rule a <http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/ValueConstraintEventRule> . ?rule <http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/constraintSensorMatch> ?sensor}";
 		
 			  Query query = QueryFactory.create(queryString) ;
 			  QueryExecution qexec = QueryExecutionFactory.create(query, model) ;
@@ -568,8 +568,8 @@ public class OntologyQueryServiceImpl extends RemoteServiceServlet
 	}
 
 	@Override
-	public boolean importNamedGraphViaSparqlDescribeQuery(String query, String sparqlEndpoint, String namedGraph) {
-		return this.ontMediator.importNamedGraphViaSparqlDescribeQuery(query, sparqlEndpoint, namedGraph);
+	public boolean importNamedGraphViaSparqlDescribeQuery(String query, String sparqlEndpoint, String namedGraph, String storedNamedGraph) {
+		return this.ontMediator.importNamedGraphViaSparqlDescribeQuery(query, sparqlEndpoint, namedGraph, storedNamedGraph);
 		
 	}
 

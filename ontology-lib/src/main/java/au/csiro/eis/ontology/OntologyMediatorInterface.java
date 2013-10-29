@@ -70,7 +70,7 @@ public interface OntologyMediatorInterface {
 	public boolean exists(String iri);
 
 	public boolean importNamedGraphViaSparqlDescribeQuery(String query,
-			String sparqlEndpoint, String namedGraph);
+			String sparqlEndpoint, String namedGraph, String storedNamedGraph);
 
 	boolean removeNamedGraph(String namedGraph);
 

@@ -18,11 +18,11 @@ public class GwtTestOntologySvc extends GWTTestCase {
 	OntologyQueryServiceAsync service;
 	public static final String CHAFFEY_DAM_DOMAIN = "Chaffey dam";
 	public static final String CHAFFEY_DAM_CONFIG = "chaffey_domain_ontology_config.json";
-	public static final String CHAFFEY_DAM_USER = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu";
+	public static final String CHAFFEY_DAM_USER = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu";
 
 	public static final String SEWER_RISING_MAINS_DOMAIN = "Sewer rising mains";
 	public static final String SEWER_RISING_MAINS_CONFIG = "uwda_domain_ontology_config.json";
-	public static final String SEWER_RISING_MAINS_USER = "http://waterinformatics1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu-uwda";
+	public static final String SEWER_RISING_MAINS_USER = "http://waterinformatics-ext1-cdc.it.csiro.au/resource/event-detection/user/jonathanyu-uwda";
 	/**
 	 * Must refer to a valid module that sources this class.
 	 */
